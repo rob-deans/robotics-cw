@@ -8,5 +8,7 @@ Part B:	Goal seeking and obstacle avoidance: go to a target location while avoid
 Part C:	Your own high level behaviour. 
 
 Demo date: 9am, 14 Dec. 2017
+
 Demo place: Lab, Haslegrave Building
+
 Coursework to be handed in: before 3pm, 15 Dec 2017 
