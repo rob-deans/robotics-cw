@@ -11,6 +11,7 @@
 #include "imageCapture.h"
 #include "findRed.h"
 #include "followGreen.h"
+#include "followYellow.h"
 
 int getselector() {
 	return SELECTOR0 + 2*SELECTOR1 + 4*SELECTOR2 + 8*SELECTOR3;
@@ -34,7 +35,7 @@ int main() {
 	} else if (selector==3) {
 		followGreen();
 	} else if (selector==4) {
-
+		followYellow();
 	} else if (selector==5) {
 
 	} else {
