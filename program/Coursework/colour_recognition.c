@@ -38,30 +38,37 @@ void nimage(ColourType col, long *isVisible){
 	int green_c, red_c, blue_c, vis;  // Colours and visibilty count??
 	*isVisible = 0;
 	vis = 0;
+	// char uartbuffer[100];
 
 	for(i=0; i<80; i++) {
 		//RGB turned into an integer value for comparison
-		red_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
-		green_c = (newbuffer[2*i] & 0xF8);
+		green_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
+		red_c = (newbuffer[2*i] & 0xF8);
 		blue_c = ((newbuffer[2*i+1] & 0x1F) << 3);
+
+		
 		
 		// Check for which colour is the most seen
 		if (col == green) {
-			if(green_c > red_c + 50){ //Green is usually much higher then red due the the extra bit place in RGB565
+			// sprintf(uartbuffer, "%d %d %d\n", green_c + 20 > red_c && green_c + 20 > blue_c, red_c > green_c + 20 && red_c > blue_c, blue_c > green_c + 20 && blue_c > red_c);
+			// e_send_uart1_char(uartbuffer, strlen(uartbuffer));
+			int greenBias = 20;
+			// if(green_c + greenBias > red_c && green_c > blue_c){ //Green is usually much higher then red due the the extra bit place in RGB565
+			if(green_c > 85) {
 				newnumbuffer[i] = 1;
 				vis +=1;
 			}else{
 				newnumbuffer[i] = 0;
 			}
 		} else if(col == red) {
-			if(red_c > green_c + 20){ // green will be less then red when red is strong.
+			if(red_c > green_c + 20 && red_c > blue_c){ // green will be less then red when red is strong.
 				newnumbuffer[i] = 1;
 				vis++;
 			}else{
 				newnumbuffer[i] = 0;
 			}
 		} else if(col == blue) {
-			if(blue_c > green_c + 20) {
+			if(blue_c > green_c + 20 && blue_c > red_c) {
 				newnumbuffer[i] = 1;
 				vis++;
 			} else {

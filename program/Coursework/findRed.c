@@ -81,7 +81,8 @@ int speed = 0;
 
 void moveLeft() {
 	e_set_speed_left(speed);
-	speed += 10;
+	e_set_speed_right(-speed);
+	speed += 1;
 }
 
 //Main function of follower
@@ -93,7 +94,21 @@ void findRed(void){
 	e_poxxxx_write_cam_registers(); 
 
 	e_start_agendas_processing();
+	long isVisible;
+	int i;
 
-	e_activate_agenda(turn, 500);
+	while(1) {
+		// Get the images
+		ngetImage();
+		nimage(green, &isVisible);
+
+		if(isVisible && getCenterValue() > 3) {  // If we have the specified colour visible set the led
+			e_set_led(0,1);
+		} else {  // else clear all leds
+			e_led_clear();
+		}
+		for(i =0;i<5000;i++){asm("nop");}
+	}
+	// e_activate_agenda(moveLeft, 500);
 }
 
