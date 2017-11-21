@@ -11,6 +11,7 @@
 #include "stdlib.h"
 
 #include "./findRed.h"
+#include "./colour_recognition.h"
 
 char fbwbuffer[160];
 int numbuffer[80];
@@ -81,10 +82,15 @@ void findRed(void){
 
 	e_start_agendas_processing();
 	int centreValue;
-
+	char uartbuffer[100];
+	
 	while(1){
+		//ngetImage(red);
 		getImage();
+		//isRedVisable = nimage(red);
 		Image();
+		sprintf(uartbuffer, "%d", isRedVisable);
+		e_send_uart1_char(uartbuffer, strlen(uartbuffer));
 		e_led_clear();
 
 		//Take a section of the center, this means if there is an error with one it won't effect it as a whole.

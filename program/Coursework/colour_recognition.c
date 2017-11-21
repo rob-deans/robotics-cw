@@ -12,79 +12,79 @@
 
 #include "./colour_recognition.h"
 
-typedef enum {
-	red, green, blue
-} ColourType;
+//typedef enum {
+//	red, green, blue
+//} ColourType;
 
-const int BUFFER = 160;
-const int NUM_BUFFER = 80;
+//const int BUFFER = 160;
+//const int NUM_BUFFER = 80;
 
-char buffer[BUFFER];
-int numbuffer[NUM_BUFFER];
+char newbuffer[160];
+int newnumbuffer[80];
 ColourType colourVisible;
 
 //const int GREEN = (((buffer[2*i] & 0x07) <<5) | ((buffer[2*i+1] & 0xE0) >> 3));
 //const int RED = (buffer[2*i] & 0xF8);
 //const int BLUE = ((buffer[2*i+1] & 0x1F) << 3);
 
-void getImage(ColourType col) {
-	e_poxxxx_launch_capture((char *)buffer);
+void ngetImage(ColourType col) {
+	e_poxxxx_launch_capture((char *)newbuffer);
     while(!e_poxxxx_is_img_ready()){};
 }
 
 // No idea if this will work
-void image(ColourType col){
+int nimage(ColourType col){
 	long i;  // Counter
-	int green, red, vis;  // Colours and visibilty count??
+	int green_c, red_c, blue_c, vis;  // Colours and visibilty count??
+	int isVisable = 0;
 	
-	for(i=0; i<NUM_BUFFER; i++) {
+	for(i=0; i<80; i++) {
 		//RGB turned into an integer value for comparison
-		red_c = (((buffer[2*i] & 0x07) <<5) | ((buffer[2*i+1] & 0xE0) >> 3));
-		green_c = (buffer[2*i] & 0xF8);
-		blue_c = ((buffer[2*i+1] & 0x1F) << 3);
+		red_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
+		green_c = (newbuffer[2*i] & 0xF8);
+		blue_c = ((newbuffer[2*i+1] & 0x1F) << 3);
 		
 		// Check for which colour is the most seen
-		if (col == ColourType.green) {
+		if (col == green) {
 			if(green_c > red_c + 50){ //Green is usually much higher then red due the the extra bit place in RGB565
-				numbuffer[i] = 1;
+				newnumbuffer[i] = 1;
 				vis +=1;
 			}else{
-				numbuffer[i] = 0;
+				newnumbuffer[i] = 0;
 			}
-		} else if(col == ColourType.red) {
+		} else if(col == red) {
 			if(red_c > green_c + 20){ // green will be less then red when red is strong.
-				numbuffer[i] = 1;
+				newnumbuffer[i] = 1;
 				vis++;
 			}else{
-				numbuffer[i] = 0;
+				newnumbuffer[i] = 0;
 			}
-		} else if(col == ColourType.blue) {
+		} else if(col == blue) {
 			if(blue_c > green_c + 20) {
-				numbuffer[i] = 1;
+				newnumbuffer[i] = 1;
 				vis++;
 			} else {
-				numbuffer[i] = 0;
+				newnumbuffer[i] = 0;
 			}
-		}	
-
-		return vis > 0;
+		}
 		
 		//If Green is visable then isGreenVisable turns to true
-		/*if(vis > 0){
-			isGreenVisable = 1;
+		if(vis > 0){
+			isVisable = 1;
 		}else{
-			isGreenVisable = 0;
-		}*/
-	}	
+			isVisable = 0;
+		}
+	}
+	return isVisable;
 }
 
-int turnDirection() {
+int nturnDirection() {
 	int sumL = 0;
 	int sumR = 0;
 	int i;
 	for(i=0;i<40;i++){
-		sumL += numbuffer[i];
-		sumR += numbuffer[i+40];
+		sumL += newnumbuffer[i];
+		sumR += newnumbuffer[i+40];
 	}
 	if(sumL<sumR){
 		return 1;
@@ -93,7 +93,7 @@ int turnDirection() {
 	}
 }
 
-void turn(void) {
+void nturn(void) {
 	if(turnDirection()){
 		e_set_speed_left (500);
 		e_set_speed_right(-500);
@@ -103,7 +103,7 @@ void turn(void) {
 	}
 }
 
-void forward() {
+void nforward() {
 	e_set_speed_left (500);
 	e_set_speed_right(500);
 }
