@@ -27,17 +27,18 @@ ColourType colourVisible;
 //const int RED = (buffer[2*i] & 0xF8);
 //const int BLUE = ((buffer[2*i+1] & 0x1F) << 3);
 
-void ngetImage(ColourType col) {
+void ngetImage() {
 	e_poxxxx_launch_capture((char *)newbuffer);
     while(!e_poxxxx_is_img_ready()){};
 }
 
 // No idea if this will work
-int nimage(ColourType col){
+void nimage(ColourType col, long *isVisible){
 	long i;  // Counter
 	int green_c, red_c, blue_c, vis;  // Colours and visibilty count??
-	int isVisable = 0;
-	
+	*isVisible = 0;
+	vis = 0;
+
 	for(i=0; i<80; i++) {
 		//RGB turned into an integer value for comparison
 		red_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
@@ -70,12 +71,15 @@ int nimage(ColourType col){
 		
 		//If Green is visable then isGreenVisable turns to true
 		if(vis > 0){
-			isVisable = 1;
+			*isVisible = 1;
 		}else{
-			isVisable = 0;
+			*isVisible = 0;
 		}
 	}
-	return isVisable;
+}
+
+int getCenterValue() {
+	return newnumbuffer[38] + newnumbuffer[39] + newnumbuffer[40] + newnumbuffer[41] + newnumbuffer[42] + newnumbuffer[43]; // removes stray 
 }
 
 int nturnDirection() {
@@ -94,7 +98,7 @@ int nturnDirection() {
 }
 
 void nturn(void) {
-	if(turnDirection()){
+	if(nturnDirection()){
 		e_set_speed_left (500);
 		e_set_speed_right(-500);
 	}else{

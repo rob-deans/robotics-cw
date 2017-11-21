@@ -15,8 +15,7 @@
 
 char fbwbuffer[160];
 int numbuffer[80];
-long isRedVisable;
-
+long isRedVisible;
 
 //custom cam picture load
 void getImage(){
@@ -40,9 +39,9 @@ void Image(){
 		}
 		//If red is visable then isRedVisable turns to true
 		if(vis>0){
-			isRedVisable = 1;
+			isRedVisible = 1;
 		}else{
-			isRedVisable = 0;
+			isRedVisible = 0;
 		}
 	}	
 }
@@ -72,6 +71,19 @@ void turn(void) {
 		e_set_speed_right(500);
 	}
 }
+
+void stop(void) {
+	e_set_speed_right(0);
+	e_set_speed_left(0);
+}
+
+int speed = 0;
+
+void moveLeft() {
+	e_set_speed_left(speed);
+	speed += 10;
+}
+
 //Main function of follower
 void findRed(void){
 	//basic set up for camera
@@ -81,34 +93,7 @@ void findRed(void){
 	e_poxxxx_write_cam_registers(); 
 
 	e_start_agendas_processing();
-	int centreValue;
-	char uartbuffer[100];
-	
-	while(1){
-		//ngetImage(red);
-		getImage();
-		//isRedVisable = nimage(red);
-		Image();
-		sprintf(uartbuffer, "%d", isRedVisable);
-		e_send_uart1_char(uartbuffer, strlen(uartbuffer));
-		e_led_clear();
 
-		//Take a section of the center, this means if there is an error with one it won't effect it as a whole.
-		centreValue = numbuffer[38] + numbuffer[39] + numbuffer[40] + numbuffer[41] + numbuffer[42] + numbuffer[43]; // removes stray 
-		if(centreValue > 3){ //If red is in the middle then stay still			
-			e_destroy_agenda(turn);
-			e_set_speed_left (0);
-			e_set_speed_right(0);
-			e_set_led(0,1);
-		}else if(isRedVisable){//If red isn't in the center but is visable then picks a direction to turn to face it
-			e_activate_agenda(turn, 650);
-			e_set_led(1,1);
-		}else{// if red isn't visible and no true values it will turn left
-			e_destroy_agenda(turn);
-			e_set_speed_left (0);
-			e_set_speed_right(0);
-			e_set_led(2,1);
-		}
-	}
+	e_activate_agenda(turn, 500);
 }
 
