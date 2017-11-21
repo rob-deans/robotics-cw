@@ -61,14 +61,16 @@ void nimage(ColourType col, long *isVisible){
 				newnumbuffer[i] = 0;
 			}
 		} else if(col == red) {
-			if(red_c > green_c + 20 && red_c > blue_c){ // green will be less then red when red is strong.
+			// if(red_c > green_c + 20 && red_c > blue_c){ // green will be less then red when red is strong.
+			if(red_c > 100) {
 				newnumbuffer[i] = 1;
 				vis++;
 			}else{
 				newnumbuffer[i] = 0;
 			}
 		} else if(col == blue) {
-			if(blue_c > green_c + 20 && blue_c > red_c) {
+			// if(blue_c > green_c + 20 && blue_c > red_c) {
+			if(blue_c > 100) {
 				newnumbuffer[i] = 1;
 				vis++;
 			} else {

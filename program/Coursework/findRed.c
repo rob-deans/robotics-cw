@@ -17,61 +17,6 @@ char fbwbuffer[160];
 int numbuffer[80];
 long isRedVisible;
 
-//custom cam picture load
-void getImage(){
-	e_poxxxx_launch_capture((char *)fbwbuffer);
-    while(!e_poxxxx_is_img_ready()){};
-}
-// Image processing removes useless information
-void Image(){	
-	long i;
-	int green, red, vis;
-	for(i=0; i<80; i++){
-		//RGB turned into an integer value for comparison
-		red = (fbwbuffer[2*i] & 0xF8);
-		green = (((fbwbuffer[2*i] & 0x07) << 5) | ((fbwbuffer[2*i+1] & 0xE0) >> 3));
-		//blue = ((fbwbuffer[2*i+1] & 0x1F) << 3); we don't need blue for looking for red.
-		if(red > green + 20){ // green will be less then red when red is strong.
-			numbuffer[i] = 1;
-			vis++;
-		}else{
-			numbuffer[i] = 0;
-		}
-		//If red is visable then isRedVisable turns to true
-		if(vis>0){
-			isRedVisible = 1;
-		}else{
-			isRedVisible = 0;
-		}
-	}	
-}
-
-//Decide which way to turn.
-int turnDirection(){
-	int sumL = 0;
-	int sumR = 0;
-	int i;
-	for(i=0;i<40;i++){
-		sumL += numbuffer[i];
-		sumR += numbuffer[i+40];
-	}
-	if(sumL<sumR){ 
-		return 1;
-	}else{
-		return 0;
-	}
-}
-//Function to deal with turning.
-void turn(void) {
-	if(turnDirection()){
-		e_set_speed_left (500);
-		e_set_speed_right(-500);
-	}else{
-		e_set_speed_left (-500);
-		e_set_speed_right(500);
-	}
-}
-
 void stop(void) {
 	e_set_speed_right(0);
 	e_set_speed_left(0);
@@ -85,6 +30,16 @@ void moveLeft() {
 	speed += 1;
 }
 
+void n_forward() {
+	e_set_speed_left(500);
+	e_set_speed_right(500);
+}
+
+void spin() {
+	e_set_speed_left(500);
+	e_set_speed_right(-500);	
+}
+
 //Main function of follower
 void findRed(void){
 	//basic set up for camera
@@ -93,21 +48,31 @@ void findRed(void){
 	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
 	e_poxxxx_write_cam_registers(); 
 
+	// int i;
+	// for(i=0;i<5000;i++) { asm("nop"); }
+
 	e_start_agendas_processing();
 	long isVisible;
-	int i;
+
+	// spin();
+	// e_activate_agenda(spin, 650);
+	// int count = 0;
 
 	while(1) {
-		// Get the images
-		ngetImage();
-		nimage(green, &isVisible);
+	// 	// Get the images
 
+		ngetImage();
+		nimage(red, &isVisible);
 		if(isVisible && getCenterValue() > 3) {  // If we have the specified colour visible set the led
-			e_set_led(0,1);
-		} else {  // else clear all leds
+			e_set_led(0, 1);
+	// 		// e_destroy_agenda(spin);
+	// 		n_forward();
+	// 		// e_activate_agenda(n_forward, 100);
+		} else {
+	// 		// e_destroy_agenda(n_forward);
+	// 		stop();
 			e_led_clear();
 		}
-		for(i =0;i<5000;i++){asm("nop");}
 	}
 	// e_activate_agenda(moveLeft, 500);
 }
