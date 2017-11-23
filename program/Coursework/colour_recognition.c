@@ -110,3 +110,11 @@ void nforward(Speed speed) {
 	e_set_speed_left (speed);
 	e_set_speed_right(speed);
 }
+
+int inProximity(Distance d) {
+
+	int frontLeft = e_get_prox(7);;
+	int frontRight = e_get_prox(0);	
+
+	return frontRight > d && frontLeft > d;
+}
