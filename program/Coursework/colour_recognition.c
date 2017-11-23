@@ -118,3 +118,12 @@ int inProximity(Distance d) {
 
 	return frontRight > d && frontLeft > d;
 }
+void backward(Speed speed) {
+	e_set_speed_left (-speed);
+	e_set_speed_right(-speed);
+}
+
+void stop() {
+    e_set_speed_left (0);
+	e_set_speed_right(0);
+}

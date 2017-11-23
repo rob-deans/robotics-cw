@@ -24,6 +24,8 @@
       <itemPath>curious.h</itemPath>
       <itemPath>colour_recognition.h</itemPath>
       <itemPath>aggressive.h</itemPath>
+      <itemPath>../../library/codec/e_sound.h</itemPath>
+      <itemPath>../../library/motor_led/fear.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -60,20 +62,28 @@
       <itemPath>curious.c</itemPath>
       <itemPath>colour_recognition.c</itemPath>
       <itemPath>aggressive.c</itemPath>
+      <itemPath>../../library/codec/e_const_sound.s</itemPath>
+      <itemPath>../../library/codec/e_init_codec_slave.s</itemPath>
+      <itemPath>../../library/codec/e_init_dci_master.s</itemPath>
+      <itemPath>../../library/codec/e_isr_dci.s</itemPath>
+      <itemPath>../../library/codec/e_sound.c</itemPath>
+      <itemPath>../../library/codec/e_common.inc</itemPath>
+      <itemPath>../../library/codec/e_sub_dci_kickoff.s</itemPath>
+      <itemPath>../../library/motor_led/fear.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>../../library/codec/e_common.inc</itemPath>
-    <itemPath>../../library/codec/e_const_sound.s</itemPath>
-    <itemPath>../../library/codec/e_init_codec_slave.s</itemPath>
-    <itemPath>../../library/codec/e_init_dci_master.s</itemPath>
-    <itemPath>../../library/codec/e_isr_dci.s</itemPath>
-    <itemPath>../../library/codec/e_sound.c</itemPath>
-    <itemPath>../../library/codec/e_sound.h</itemPath>
-    <itemPath>../../library/codec/e_sub_dci_kickoff.s</itemPath>
+    <itemPath>../../library/a_d/e_accelerometer.c</itemPath>
+    <itemPath>../../library/a_d/e_accelerometer.h</itemPath>
+    <itemPath>../../library/a_d/e_ad_conv.c</itemPath>
+    <itemPath>../../library/a_d/e_ad_conv.h</itemPath>
+    <itemPath>../../library/a_d/e_micro.c</itemPath>
+    <itemPath>../../library/a_d/e_micro.h</itemPath>
+    <itemPath>fear.c</itemPath>
+    <itemPath>fear.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../../library/motor_led</Elem>
@@ -84,6 +94,7 @@
     <Elem>../../library/uart</Elem>
     <Elem>.</Elem>
     <Elem>../../library/codec</Elem>
+    <Elem>../../library/a_d</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

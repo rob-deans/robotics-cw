@@ -18,8 +18,10 @@ void ngetImage();
 void nimage(ColourType, long*);
 int nturnDirection(void);
 void nturn(void);
-void nforward();
+void nforward(Speed);
 int isCenter();
 int inProximity(Distance);
+void backward(Speed);
+void stop();
 
 #endif

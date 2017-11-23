@@ -18,6 +18,8 @@
 #include "followGreen.h"
 #include "followYellow.h"
 #include "aggressive.h"
+#include "fear.h"
+
 
 int getselector() {
 	return SELECTOR0 + 2*SELECTOR1 + 4*SELECTOR2 + 8*SELECTOR3;
@@ -33,25 +35,9 @@ int main() {
 	switch(selector) {
 		case 1: imageCapture(); break;
 		case 2: findRed(); break;
-		case 3: followGreen(); break;
+		case 3: fear(); break;
 		case 4: aggressive(); break;
 		default: return 0;
 	}
-
-	// if (selector==0) {
-
-	// } else if (selector==1) {
-	// 	imageCapture();
-	// } else if (selector==2) {
-	// 	findRed();
-	// } else if (selector==3) {
-	// 	followGreen();
-	// } else if (selector==4) {
-	// 	aggressive();
-	// } else if (selector==5) {
-
-	// } else {
-
-	// }
 }
 

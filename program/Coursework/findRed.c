@@ -19,11 +19,6 @@ char fbwbuffer[160];
 int numbuffer[80];
 long isRedVisible;
 
-void stop(void) {
-	e_set_speed_right(0);
-	e_set_speed_left(0);
-}
-
 int speed = 0;
 
 void moveLeft() {
