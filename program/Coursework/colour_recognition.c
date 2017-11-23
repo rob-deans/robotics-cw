@@ -5,6 +5,7 @@
 #include "uart/e_uart_char.h"
 #include "camera/fast_2_timer/e_poxxxx.h"
 #include "motor_led/advance_one_timer/e_led.h"
+#include "a_d/e_prox.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -116,7 +117,7 @@ int inProximity(Distance d) {
 	int frontLeft = e_get_prox(7);;
 	int frontRight = e_get_prox(0);	
 
-	return frontRight > d && frontLeft > d;
+	return frontRight > d || frontLeft > d;
 }
 void backward(Speed speed) {
 	e_set_speed_left (-speed);

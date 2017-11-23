@@ -146,7 +146,7 @@ void e_init_ad_scan(unsigned char only_micro)
 		while (e_last_acc_scan_id < ACC_SAMP_NB-1);	
 
 	if(isEpuckVersion1_3()) {
-		centre_z = 0;
+//		centre_z = 0;
 	}
 
 }

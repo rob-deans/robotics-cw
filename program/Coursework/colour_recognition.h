@@ -10,7 +10,7 @@ typedef enum {
 } Speed;
 
 typedef enum {
-	close = 500, far = 100
+	close = 250, far = 100
 } Distance;
 
 void setUpCamera();

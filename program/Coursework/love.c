@@ -4,7 +4,7 @@
 #include "motor_led/advance_one_timer/e_agenda.h"
 #include "uart/e_uart_char.h"
 #include "camera/fast_2_timer/e_poxxxx.h"
-#include "a_d/advance_ad_scan/e_prox.h"
+#include "a_d/e_prox.h"
 #include "motor_led/advance_one_timer/e_led.h"
 
 
@@ -15,45 +15,70 @@
 #include "./love.h"
 #include "./colour_recognition.h"
 
-void __stop() {
-	e_set_speed_left (0);
-	e_set_speed_right(0);
-}
-
-void ninitCamera() {
-    e_poxxxx_init_cam();
-	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
-	e_poxxxx_write_cam_registers(); 
-}
-
 //Main function of follower
 void love(void){
-	ninitCamera();
+	setUpCamera();
     e_start_agendas_processing();
     
    	long isVisible;
 
 	while(1) {
+        int prevRightSteps = 0;
+        int prevLeftSteps = 0;
+        int rightSteps = 0;        
+        int leftSteps = 0;
+
 
 		ngetImage();      
         nimage(red, &isVisible);
         
-        // if (checkProxSensor(150)) {
-        //     e_set_led(7, 1);
-        // }
-        
 		if(isVisible && isCenter()) {
 			// It is red and in the center
 			if(inProximity(close)) {
-				e_set_led(0, 1);
-				__stop();
+                rightSteps = prevRightSteps = e_get_steps_right();
+                leftSteps = prevLeftSteps = e_get_steps_left();
+                
+
+                e_set_speed_left(500);
+                e_set_speed_right(-500);
+                while (prevLeftSteps + 50 > leftSteps) {
+                    leftSteps = e_get_steps_left();
+                }
+                e_set_speed_left(0);
+                e_set_speed_right(0);
+                
+                rightSteps = prevRightSteps = e_get_steps_right();
+                leftSteps = prevLeftSteps = e_get_steps_left();
+
+                e_set_speed_left(-500);
+                e_set_speed_right(500);
+                while (prevRightSteps + 100 > rightSteps) {
+                    rightSteps = e_get_steps_right();
+                }
+                
+                rightSteps = prevRightSteps = e_get_steps_right();
+                leftSteps = prevLeftSteps = e_get_steps_left();
+                
+                e_set_speed_left(500);
+                e_set_speed_right(-500);
+                while (prevLeftSteps + 50 > leftSteps) {
+                    leftSteps = e_get_steps_left();
+                }
+                e_set_speed_left(0);
+                e_set_speed_right(0);
 			} else {
+                e_led_clear();
    		        nforward(fast);	
-			}
+            }
         } else {
-			e_led_clear();
-            __stop();
-		}
+            e_led_clear();
+            stop();
+        }
+
+//        } else {
+//			e_led_clear();
+//            __stop();
+//		}
 
 	}
 }

@@ -54,7 +54,7 @@ dkms.conf
 /program/Coursework/Demo.X/nbproject/private/
 /program/Coursework/Demo.X/build/default/
 /program/Coursework/Demo.X/dist/default/
-
+**/nbproject/*
 **/.DS_Store
 
 **/Demo.X

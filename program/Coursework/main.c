@@ -9,16 +9,15 @@
 #include "motor_led/advance_one_timer/e_agenda.h"
 #include "motor_led/advance_one_timer/e_led.h"
 #include "uart/e_uart_char.h"
+#include "a_d/advance_ad_scan/e_prox.h"
 #include "a_d/advance_ad_scan/e_ad_conv.h"
-#include <codec/e_sound.h>
-// #include "a_d/advance_ad_scan/e_prox.h"
+#include "codec/e_sound.h"
 
 #include "imageCapture.h"
-#include "findRed.h"
-#include "followGreen.h"
-#include "followYellow.h"
 #include "aggressive.h"
 #include "fear.h"
+#include "love.h"
+
 
 
 int getselector() {
@@ -30,11 +29,14 @@ int main() {
 
 	e_init_port();
 	e_init_motors();
+	e_init_ad_scan(ALL_ADC);
+	e_calibrate_ir();
 	selector=getselector();
+    
 	
 	switch(selector) {
 		case 1: imageCapture(); break;
-		case 2: findRed(); break;
+		case 2: love(); break;
 		case 3: fear(); break;
 		case 4: aggressive(); break;
 		default: return 0;
