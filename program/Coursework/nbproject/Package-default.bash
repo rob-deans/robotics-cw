@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/Demo.X.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=Demo.X.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=Demo.X/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/Coursework.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=Coursework.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=coursework/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/Demo.X/bin
+makeDirectory ${TMPDIR}/coursework/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/Demo.X.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/coursework.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/Demo.X.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/coursework.tar *
 checkReturnCode
 
 # Cleanup

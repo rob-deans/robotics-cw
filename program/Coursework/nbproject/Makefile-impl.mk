@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Demo.X
+PROJECTNAME=Coursework
 
 # Active Configuration
 DEFAULTCONF=default
