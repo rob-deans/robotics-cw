@@ -6,7 +6,7 @@ typedef enum {
 } ColourType;
 
 void ngetImage();
-void nimage(ColourType, long *isVisible);
+void nimage(ColourType, long*);
 int nturnDirection(void);
 void nturn(void);
 void nforward();

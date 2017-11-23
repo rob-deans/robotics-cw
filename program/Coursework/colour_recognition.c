@@ -12,20 +12,12 @@
 
 #include "./colour_recognition.h"
 
-//typedef enum {
-//	red, green, blue
-//} ColourType;
-
-//const int BUFFER = 160;
-//const int NUM_BUFFER = 80;
 
 char newbuffer[160];
 int newnumbuffer[80];
-ColourType colourVisible;
+int gbuffernew[160];
+int gnumbuffernew[80];
 
-//const int GREEN = (((buffer[2*i] & 0x07) <<5) | ((buffer[2*i+1] & 0xE0) >> 3));
-//const int RED = (buffer[2*i] & 0xF8);
-//const int BLUE = ((buffer[2*i+1] & 0x1F) << 3);
 
 void ngetImage() {
 	e_poxxxx_launch_capture((char *)newbuffer);
@@ -35,60 +27,55 @@ void ngetImage() {
 // No idea if this will work
 void nimage(ColourType col, long *isVisible){
 	long i;  // Counter
-	int green_c, red_c, blue_c, vis;  // Colours and visibilty count??
+	int green_c, red_c, blue_c, vis;
 	*isVisible = 0;
 	vis = 0;
-	// char uartbuffer[100];
-
+    int greenBias = 20;
 	for(i=0; i<80; i++) {
 		//RGB turned into an integer value for comparison
 		green_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
 		red_c = (newbuffer[2*i] & 0xF8);
 		blue_c = ((newbuffer[2*i+1] & 0x1F) << 3);
 
-		
-		
-		// Check for which colour is the most seen
-		if (col == green) {
-			// sprintf(uartbuffer, "%d %d %d\n", green_c + 20 > red_c && green_c + 20 > blue_c, red_c > green_c + 20 && red_c > blue_c, blue_c > green_c + 20 && blue_c > red_c);
-			// e_send_uart1_char(uartbuffer, strlen(uartbuffer));
-			int greenBias = 20;
-			// if(green_c + greenBias > red_c && green_c > blue_c){ //Green is usually much higher then red due the the extra bit place in RGB565
-			if(green_c > 85) {
-				newnumbuffer[i] = 1;
-				vis +=1;
-			}else{
-				newnumbuffer[i] = 0;
-			}
-		} else if(col == red) {
-			// if(red_c > green_c + 20 && red_c > blue_c){ // green will be less then red when red is strong.
-			if(red_c > 100) {
-				newnumbuffer[i] = 1;
-				vis++;
-			}else{
-				newnumbuffer[i] = 0;
-			}
-		} else if(col == blue) {
-			// if(blue_c > green_c + 20 && blue_c > red_c) {
-			if(blue_c > 100) {
-				newnumbuffer[i] = 1;
-				vis++;
-			} else {
-				newnumbuffer[i] = 0;
-			}
-		}
-		
-		//If Green is visable then isGreenVisable turns to true
-		if(vis > 0){
-			*isVisible = 1;
-		}else{
-			*isVisible = 0;
-		}
+        
+        switch(col) {
+            case red: 
+                if(red_c > green_c + greenBias){ // green will be less then red when red is strong.
+                	newnumbuffer[i] = 1;
+                    vis++;
+                } else {
+                    newnumbuffer[i] = 0;
+                }
+                break;
+            case green:
+                if(green_c > red_c + greenBias){ //Green is usually much higher then red due the the extra bit place in RGB565
+                    newnumbuffer[i] = 1;
+                    vis++;
+                } else {
+                    newnumbuffer[i] = 0;
+                }
+                break;
+            case blue:
+                if(blue_c > green_c && blue_c > red_c) {
+                    newnumbuffer[i] = 1;
+                    vis++;
+                } else {
+                    newnumbuffer[i] = 0;
+                }
+                break;
+        }
 	}
+		
+    //If Green is visible then isGreenVisable turns to true
+    if(vis > 0){
+        *isVisible = 1;
+    }else{
+        *isVisible = 0;
+    }
 }
 
-int getCenterValue() {
-	return newnumbuffer[38] + newnumbuffer[39] + newnumbuffer[40] + newnumbuffer[41] + newnumbuffer[42] + newnumbuffer[43]; // removes stray 
+int isCenter() {
+	return (newnumbuffer[38] + newnumbuffer[39] + newnumbuffer[40] + newnumbuffer[41] + newnumbuffer[42] + newnumbuffer[43]) > 3; // removes stray 
 }
 
 int nturnDirection() {

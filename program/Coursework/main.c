@@ -7,6 +7,10 @@
 #include "motor_led/e_epuck_ports.h"
 #include "motor_led/advance_one_timer/e_motors.h"
 #include "motor_led/advance_one_timer/e_agenda.h"
+#include "motor_led/advance_one_timer/e_led.h"
+#include "uart/e_uart_char.h"
+#include "a_d/advance_ad_scan/e_ad_conv.h"
+#include "a_d/advance_ad_scan/e_prox.h"
 
 #include "imageCapture.h"
 #include "findRed.h"
@@ -21,8 +25,9 @@ int main() {
 	int selector;
 //init
 	e_init_port();
-	e_init_uart1();
 	e_init_motors();
+	e_init_ad_scan(ALL_ADC);
+	e_calibrate_ir();
 
 	selector=getselector();
 	

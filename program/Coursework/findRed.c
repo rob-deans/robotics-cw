@@ -4,7 +4,9 @@
 #include "motor_led/advance_one_timer/e_agenda.h"
 #include "uart/e_uart_char.h"
 #include "camera/fast_2_timer/e_poxxxx.h"
+#include "a_d/advance_ad_scan/e_prox.h"
 #include "motor_led/advance_one_timer/e_led.h"
+
 
 #include "stdio.h"
 #include "string.h"
@@ -40,40 +42,52 @@ void spin() {
 	e_set_speed_right(-500);	
 }
 
-//Main function of follower
-void findRed(void){
-	//basic set up for camera
-	e_poxxxx_init_cam();
-	// sensor_x1, sensor_y1, width, height, zoom width, zoom height, colour mode
+int checkProxSensor(int distance) {   
+    int proxData[2];
+
+	// get one single sample for all 8 sensors
+	proxData[0] = e_get_prox(0);
+    proxData[1] = e_get_prox(7);
+
+    // Detect obstacle_present on any of the 8 sensors
+	long obstaclePresentFar = 0;
+    
+    if(proxData[0] > distance || proxData[1] > distance) {
+        obstaclePresentFar = 1;
+    }
+	return obstaclePresentFar;   				
+}
+
+void initCamera() {
+    e_poxxxx_init_cam();
 	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
 	e_poxxxx_write_cam_registers(); 
+}
 
-	// int i;
-	// for(i=0;i<5000;i++) { asm("nop"); }
-
-	e_start_agendas_processing();
-	long isVisible;
-
-	// spin();
-	// e_activate_agenda(spin, 650);
-	// int count = 0;
+//Main function of follower
+void findRed(void){
+	initCamera();
+    e_start_agendas_processing();
+    
+   	long isVisible;
 
 	while(1) {
-	// 	// Get the images
 
-		ngetImage();
-		nimage(red, &isVisible);
-		if(isVisible && getCenterValue() > 3) {  // If we have the specified colour visible set the led
+		ngetImage();      
+        nimage(blue, &isVisible);
+        
+        if (checkProxSensor(150)) {
+            e_set_led(7, 1);
+        }
+        
+		if(isVisible && isCenter()) {
 			e_set_led(0, 1);
-	// 		// e_destroy_agenda(spin);
-	// 		n_forward();
-	// 		// e_activate_agenda(n_forward, 100);
-		} else {
-	// 		// e_destroy_agenda(n_forward);
-	// 		stop();
+            n_forward();
+        } else {
 			e_led_clear();
+            spin();
 		}
+
 	}
-	// e_activate_agenda(moveLeft, 500);
 }
 
