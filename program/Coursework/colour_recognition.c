@@ -12,12 +12,14 @@
 
 #include "./colour_recognition.h"
 
-
 char newbuffer[160];
 int newnumbuffer[80];
-int gbuffernew[160];
-int gnumbuffernew[80];
 
+void setUpCamera() {
+	e_poxxxx_init_cam();
+	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
+	e_poxxxx_write_cam_registers(); 
+}
 
 void ngetImage() {
 	e_poxxxx_launch_capture((char *)newbuffer);
@@ -31,6 +33,7 @@ void nimage(ColourType col, long *isVisible){
 	*isVisible = 0;
 	vis = 0;
     int greenBias = 20;
+
 	for(i=0; i<80; i++) {
 		//RGB turned into an integer value for comparison
 		green_c = (((newbuffer[2*i] & 0x07) <<5) | ((newbuffer[2*i+1] & 0xE0) >> 3));
@@ -103,7 +106,7 @@ void nturn(void) {
 	}
 }
 
-void nforward() {
-	e_set_speed_left (500);
-	e_set_speed_right(500);
+void nforward(Speed speed) {
+	e_set_speed_left (speed);
+	e_set_speed_right(speed);
 }
