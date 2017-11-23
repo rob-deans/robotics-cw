@@ -10,12 +10,14 @@
 #include "motor_led/advance_one_timer/e_led.h"
 #include "uart/e_uart_char.h"
 #include "a_d/advance_ad_scan/e_ad_conv.h"
-#include "a_d/advance_ad_scan/e_prox.h"
+#include <codec/e_sound.h>
+// #include "a_d/advance_ad_scan/e_prox.h"
 
 #include "imageCapture.h"
 #include "findRed.h"
 #include "followGreen.h"
 #include "followYellow.h"
+#include "aggressive.h"
 
 int getselector() {
 	return SELECTOR0 + 2*SELECTOR1 + 4*SELECTOR2 + 8*SELECTOR3;
@@ -23,30 +25,33 @@ int getselector() {
 
 int main() {
 	int selector;
-//init
+
 	e_init_port();
 	e_init_motors();
-	e_init_ad_scan(ALL_ADC);
-	e_calibrate_ir();
-
 	selector=getselector();
 	
-	if (selector==0) {
-
-	} else if (selector==1) {
-		imageCapture();
-	} else if (selector==2) {
-		findRed();
-	} else if (selector==3) {
-		followGreen();
-	} else if (selector==4) {
-		followYellow();
-	} else if (selector==5) {
-
-	} else {
+	switch(selector) {
+		case 1: imageCapture(); break;
+		case 2: findRed(); break;
+		case 3: followGreen(); break;
+		case 4: aggressive(); break;
+		default: return 0;
 	}
 
-	
-	while(1);
+	// if (selector==0) {
+
+	// } else if (selector==1) {
+	// 	imageCapture();
+	// } else if (selector==2) {
+	// 	findRed();
+	// } else if (selector==3) {
+	// 	followGreen();
+	// } else if (selector==4) {
+	// 	aggressive();
+	// } else if (selector==5) {
+
+	// } else {
+
+	// }
 }
 
