@@ -41,19 +41,17 @@ void fear(void){
 	//basic set up for the camera and 
 	setUpCamera();	
 	e_start_agendas_processing();
-	e_init_sound();
-    e_init_micro();
     
 	long isVisible;
     int timer = 0;
     int tooLoud = 0;
     int wasTooLoud = 0;
     
-    e_activate_agenda(nturn, 500);
+//    e_activate_agenda(nturn, 500);
 
 	while(1){
 		ngetImage();        
-		e_led_clear();
+//		e_led_clear();
 		nimage(green, &isVisible);
         tooLoud = getVolume(1275);
         
