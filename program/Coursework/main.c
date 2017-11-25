@@ -16,6 +16,9 @@
 #include "aggressive.h"
 #include "fear.h"
 #include "love.h"
+#include "curious.h"
+#include "colour_recognition.h"
+
 
 
 
@@ -26,8 +29,7 @@ int getselector() {
 void off() {
     while(1) {
         e_led_clear();
-        int i;
-        for(i=0;i<10000;i++);
+        wait(10000);
     }
 }
 
@@ -35,7 +37,7 @@ int main() {
 	int selector;
 
 	e_init_port();
-	e_init_sound();
+//	e_init_sound();
     e_init_micro();
 	e_init_motors();
 	e_init_ad_scan(ALL_ADC);
@@ -47,6 +49,7 @@ int main() {
 		case 2: love(); break;
 		case 3: fear(); break;
 		case 4: aggressive(); break;
+        case 5: curious(); break;
 		default: off();
 	}
 }

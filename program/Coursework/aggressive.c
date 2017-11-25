@@ -34,7 +34,7 @@ void angryFlash(void) {
 //Main function of follower
 void aggressive(void){
 	//basic set up for the camera and 
-	setUpCamera();	
+	initCamera();	
 
 	e_start_agendas_processing();
 

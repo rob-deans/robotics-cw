@@ -53,12 +53,6 @@ void spin() {
 // 	return obstaclePresentFar;   				
 // }
 
-void initCamera() {
-    e_poxxxx_init_cam();
-	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
-	e_poxxxx_write_cam_registers(); 
-}
-
 //Main function of follower
 void findRed(void){
 	initCamera();
