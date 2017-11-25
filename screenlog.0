@@ -1,61 +1,0 @@
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m[00m➜ [K[?1h=[?2004hscreen -L[8D[1C[1C[1C[1C[1C[1C[1Ch[?1l>[?2004l
-kscreen\Use: screen [-opts] [cmd [args]]
- or: screen -r [host.tty]
-
-Options:
--a            Force all capabilities into each window's termcap.
--A -[r|R]     Adapt all windows to the new display width & height.
--c file       Read configuration file instead of '.screenrc'.
--d (-r)       Detach the elsewhere running screen (and reattach here).
--dmS name     Start as daemon: Screen session in detached mode.
--D (-r)       Detach and logout remote (and reattach here).
--D -RR        Do whatever is needed to get a screen session.
--e xy         Change command characters.
--f            Flow control on, -fn = off, -fa = auto.
--h lines      Set the size of the scrollback history buffer.
--i            Interrupt output sooner when flow control is on.
--list         or -ls. Do nothing, just list our SockDir.
--L            Turn on output logging.
--m            ignore $STY variable, do create a new screen session.
--O            Choose optimal output rather than exact vt100 emulation.
--p window     Preselect the named window if it exists.
--q            Quiet startup. Exits with non-zero return code if unsuccessful.
--r            Reattach to a detached screen process.
--R            Reattach if possible, otherwise start a new session.
--s shell      Shell to execute rather than $SHELL.
--S sockname   Name this session <pid>.sockname instead of <pid>.<tty>.<host>.
--t title      Set title. (window's name).
--T term       Use term as $TERM for windows, rather than "screen".
--U            Tell screen to use UTF-8 encoding.
--v            Print "Screen version 4.00.03 (FAU) 23-Oct-06".
--wipe         Do nothing, just clean up SockDir.
--x            Attach to a not detached screen. (Multi display mode).
--X            Execute <cmd> as a screen command in the specified session.
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m⍉ [00m➜ [K[?1h=[?2004hscreen -h ? grep      |Z  grep list[?1l>[?2004l
-kscreen\-[01;31m[Klist[m[K         or -ls. Do nothing, just [01;31m[Klist[m[K our SockDir.
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m[00m➜ [K[?1h=[?2004hscreen -h | grep listl            [12Dist[?1l>[?2004l
-kscreen\There are screens on:
-	90704.ttys004.Liams-MacBook-Pro	(Attached)
-	90497.ttys004.Liams-MacBook-Pro	(Detached)
-2 Sockets in /var/folders/z_/3sfhn6wd6v7czy826_bnkplc0000gn/T/.screen.
-
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m⍉ [00m➜ [K[?1h=[?2004hscreen -list[11D[1C[1C[1C[1C[1C[1C[1Cr    90704.ttys004.Liams-MacBook-Pro[?1l>[?2004l
-kscreen\There is a screen on:
-	90704.ttys004.Liams-MacBook-Pro	(Attached)
-There is no screen to be resumed matching 90704.ttys004.Liams-MacBook-Pro.
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m⍉ [00m➜ [K[?1h=[?2004hscreen -r 90704.ttys004.Liams-MacBook-Pro[P[32C [33DR 90704.ttys004.Liams-MacBook-Pro[32D[?1l>[?2004l
-kscreen\There is a screen on:
-	90704.ttys004.Liams-MacBook-Pro	(Attached)
-[?1049h)0[4l[?1h=[0m(B[1;51r[H[J[H[J[50B[3mNew screen...[23m                 [H[1m[3m%[23m[0m[1m[0m                                                                                                   [H[J[36mrobotics-cw [32mrob_branch [31m✗[39m [31m1d [39m[33m△ [36m✓ [37m◒ [31m[39m➜ [K
-[?1l>[51;1H
-[?1049l[screen is terminating]
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m[00m➜ [K[?1h=[?2004hscreen -R 90704.ttys004.Liams-MacBook-Pro[33Dr[32C[33Dlist                             [29D[?1l>[?2004l
-kscreen\There are screens on:
-	90704.ttys004.Liams-MacBook-Pro	(Attached)
-	90497.ttys004.Liams-MacBook-Pro	(Detached)
-2 Sockets in /var/folders/z_/3sfhn6wd6v7czy826_bnkplc0000gn/T/.screen.
-
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m⍉ [00m➜ [K[?1h=[?2004hscreen -listR 90704.ttys004.Liams-MacBook-Pro[8D[8D[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[P[26C [27D[P[26C [27D[P[26C [27D4.ttys004.Liams-MacBook-Pro[26D9.ttys004.Liams-MacBook-Pro[26D7.ttys004.Liams-MacBook-Pro[26D[?1l>[?2004l
-kscreen\[?1049h)0[4l[?1h=[0m(B[1;51r[H[J[H[J[?1l>[51;1H
-[?1049l[screen is terminating]
-[1m[3m%[23m[1m[0m                                                                                                   k..s/robotics-cw\[0m[23m[24m[J[36mrobotics-cw [32mrob_branch [31m✗[00m [00m[00m[31m1d [00m[33m△ [36m✓ [37m◒ [31m[00m➜ [K[?1h=[?2004h
