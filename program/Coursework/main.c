@@ -12,6 +12,7 @@
 #include "a_d/advance_ad_scan/e_prox.h"
 #include "a_d/advance_ad_scan/e_ad_conv.h"
 #include "codec/e_sound.h"
+#include "a_d/e_micro.h"
 
 #include "aggressive.h"
 #include "fear.h"
@@ -52,5 +53,7 @@ int main() {
         case 5: curious(); break;
 		default: off();
 	}
+    
+    return 0;
+    
 }
-
