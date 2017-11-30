@@ -1,6 +1,8 @@
 #ifndef COLOUR
 #define COLOUR
 
+#define MIN_VOLUME = 1250;
+
 typedef enum {
 	red, green, blue
 } ColourType;
@@ -36,6 +38,7 @@ int inProximity(Distance);
 // Sound
 int isSoundInFront(int, int);
 SoundLocation soundLocation();
+// int getVolume(int);
 
 // Utility
 void wait(int);
