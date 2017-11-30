@@ -57,6 +57,50 @@ unsigned int tickAdcIsr = 0;    // tick resolution = ADC_ISR_PERIOD = 1/16384 = 
  * \param only_micro Put MICRO_ONLY to use only the three microphones
  * at 33kHz. Put ALL_ADC to use all the stuff using the ADC.
  */
+void e_init_ad(void)
+{
+  ADCON1 = ADCON2 = ADCON3 = 0;
+  // ADPCFGbits.PCFGx 
+  // = 0 for Analog input mode, 
+  // = 1 for digital input mode (default)
+  ADPCFGbits.PCFG0 = 1; // Debugger 
+  ADPCFGbits.PCFG1 = 1; // Debugger 
+  ADPCFGbits.PCFG2 = 0; // mic1
+  ADPCFGbits.PCFG3 = 0; // mic2
+  ADPCFGbits.PCFG4 = 0; // mic3
+  ADPCFGbits.PCFG5 = 0;	// axe x acc.
+  ADPCFGbits.PCFG6 = 0; // axe y acc.
+  ADPCFGbits.PCFG7 = 0; // axe z acc.
+  ADPCFGbits.PCFG8 = 0; // ir0
+  ADPCFGbits.PCFG9 = 0; // ir1
+  ADPCFGbits.PCFG10 = 0;  // ir2
+  ADPCFGbits.PCFG11 = 0;  // ir3
+  ADPCFGbits.PCFG12 = 0;  // ir4
+  ADPCFGbits.PCFG13 = 0;  // ir5
+  ADPCFGbits.PCFG14 = 0;  // ir6
+  ADPCFGbits.PCFG15 = 0;  // ir7
+  ADCON3 = (2*667/TCY_PIC)-1; //ADCS sampling time Tad minimum 667ns    
+  ADCHS =0x0007;
+  ADCON1bits.ADON = 1;
+}
+
+/*! \brief Function to sample an AD channel
+ * \param channel The A/D channel you want to sample
+ *                Must be between 0 to 15
+ * \return The sampled value on the specified channel
+ */
+int e_read_ad(unsigned int channel)
+{
+  int delay;
+  if(channel > 0x000F) return(0);
+  ADCHS = channel;
+  ADCON1bits.SAMP = 1;
+  for(delay = 0; delay < 40; delay++);
+  IFS0bits.ADIF = 0;
+  ADCON1bits.SAMP = 0;
+  while(!IFS0bits.ADIF);
+  return(ADCBUF0);
+}
 void e_init_ad_scan(unsigned char only_micro)
 {
 	selector = getselector();

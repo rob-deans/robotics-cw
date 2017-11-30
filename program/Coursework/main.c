@@ -8,10 +8,10 @@
 #include "motor_led/advance_one_timer/e_motors.h"
 #include "motor_led/advance_one_timer/e_agenda.h"
 #include "motor_led/advance_one_timer/e_led.h"
-#include "uart/e_uart_char.h"
 #include "a_d/advance_ad_scan/e_prox.h"
 #include "a_d/advance_ad_scan/e_ad_conv.h"
 #include "codec/e_sound.h"
+#include "a_d/e_micro.h"
 
 #include "aggressive.h"
 #include "fear.h"
