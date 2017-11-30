@@ -6,6 +6,7 @@
 #include "camera/fast_2_timer/e_poxxxx.h"
 #include "motor_led/advance_one_timer/e_led.h"
 #include "a_d/e_prox.h"
+#include "a_d/e_micro.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -16,7 +17,8 @@
 char newbuffer[160];
 int newnumbuffer[80];
 
-void setUpCamera() {
+// Camera start
+void initCamera() {
 	e_poxxxx_init_cam();
 	e_poxxxx_config_cam(0,(ARRAY_HEIGHT - 4)/2,640,4,8,4,RGB_565_MODE);
 	e_poxxxx_write_cam_registers(); 
@@ -107,18 +109,14 @@ void nturn(void) {
 	}
 }
 
+// Camera end //
+
+// Movement start 
 void nforward(Speed speed) {
 	e_set_speed_left (speed);
 	e_set_speed_right(speed);
 }
 
-int inProximity(Distance d) {
-
-	int frontLeft = e_get_prox(7);;
-	int frontRight = e_get_prox(0);	
-
-	return frontRight > d || frontLeft > d;
-}
 void backward(Speed speed) {
 	e_set_speed_left (-speed);
 	e_set_speed_right(-speed);
@@ -128,3 +126,55 @@ void stop() {
     e_set_speed_left (0);
 	e_set_speed_right(0);
 }
+
+// Movement end //
+
+// IR sensor/proximity start
+
+int inProximity(Distance d) {
+
+	int frontLeft = e_get_prox(7);;
+	int frontRight = e_get_prox(0);	
+
+	return frontRight > d || frontLeft > d;
+}
+
+// IR sensor/proxmity end //
+
+// Sound start
+
+int isSoundInFront(int m0, int m1) {
+    return (m0 - m1) <= 100;
+}
+
+// Again not sure if this will work
+SoundLocation soundLocation() {
+    int m0, m1, m2;
+    e_get_micro(&m0, &m1, &m2);
+    int vol = 1250;
+    if (m0 > vol || m1 > vol || m2 > vol) {
+        // Check if roughly center
+        if(isSoundInFront(m0, m1)) {
+            return front;
+        } else {
+            if(m0 > m1) {
+                return right;
+            } else {
+                return left;
+            }
+        }
+    } else {
+        return unknown;
+    }
+}
+
+// Sound end //
+
+// Utility start
+
+void wait(int time) {
+    int i;
+    for(i=0;i<time;i++){asm("nop");}
+}
+
+// Utility end

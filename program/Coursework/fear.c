@@ -39,7 +39,7 @@ void run() {
 //Main function of follower
 void fear(void){
 	//basic set up for the camera and 
-	setUpCamera();	
+	initCamera();	
 	e_start_agendas_processing();
     
 	long isVisible;
