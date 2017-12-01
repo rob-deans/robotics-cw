@@ -66,8 +66,6 @@ void curious() {
                     leftSteps = e_get_steps_left();
                 }
 
-                stop();
-
     			stop();
                 count = 0;
     		}
