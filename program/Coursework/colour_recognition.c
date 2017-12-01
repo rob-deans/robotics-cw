@@ -128,3 +128,24 @@ void stop() {
     e_set_speed_left (0);
 	e_set_speed_right(0);
 }
+
+void moveDistance(Length length, Speed leftSpeed, Speed rightSpeed) {
+
+    int prevRightSteps = 0;
+    int prevLeftSteps = 0;
+    int rightSteps = 0;        
+    int leftSteps = 0;
+    
+    rightSteps = prevRightSteps = e_get_steps_right();
+    leftSteps = prevLeftSteps = e_get_steps_left();
+    
+    e_set_speed_left(leftSpeed);
+    e_set_speed_right(rightSpeed);
+
+    while (prevLeftSteps + length > leftSteps) {
+        leftSteps = e_get_steps_left();
+    }
+
+    stop();
+
+}

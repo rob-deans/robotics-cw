@@ -23,11 +23,6 @@ void love(void){
    	long isVisible;
 
 	while(1) {
-        int prevRightSteps = 0;
-        int prevLeftSteps = 0;
-        int rightSteps = 0;        
-        int leftSteps = 0;
-
 
 		ngetImage();      
         nimage(red, &isVisible);
@@ -35,37 +30,42 @@ void love(void){
 		if(isVisible && isCenter()) {
 			// It is red and in the center
 			if(inProximity(close)) {
-                rightSteps = prevRightSteps = e_get_steps_right();
-                leftSteps = prevLeftSteps = e_get_steps_left();
+
+                moveDistance(small, medium, nmedium);
+                moveDistance(decent, nmedium, medium);
+                moveDistance(small, medium, nmedium);
+
+                // rightSteps = prevRightSteps = e_get_steps_right();
+                // leftSteps = prevLeftSteps = e_get_steps_left();
                 
 
-                e_set_speed_left(500);
-                e_set_speed_right(-500);
-                while (prevLeftSteps + 50 > leftSteps) {
-                    leftSteps = e_get_steps_left();
-                }
-                e_set_speed_left(0);
-                e_set_speed_right(0);
+                // e_set_speed_left(500);
+                // e_set_speed_right(-500);
+                // while (prevLeftSteps + 50 > leftSteps) {
+                //     leftSteps = e_get_steps_left();
+                // }
+                // e_set_speed_left(0);
+                // e_set_speed_right(0);
                 
-                rightSteps = prevRightSteps = e_get_steps_right();
-                leftSteps = prevLeftSteps = e_get_steps_left();
+                // rightSteps = prevRightSteps = e_get_steps_right();
+                // leftSteps = prevLeftSteps = e_get_steps_left();
 
-                e_set_speed_left(-500);
-                e_set_speed_right(500);
-                while (prevRightSteps + 100 > rightSteps) {
-                    rightSteps = e_get_steps_right();
-                }
+                // e_set_speed_left(-500);
+                // e_set_speed_right(500);
+                // while (prevRightSteps + 100 > rightSteps) {
+                //     rightSteps = e_get_steps_right();
+                // }
                 
-                rightSteps = prevRightSteps = e_get_steps_right();
-                leftSteps = prevLeftSteps = e_get_steps_left();
+                // rightSteps = prevRightSteps = e_get_steps_right();
+                // leftSteps = prevLeftSteps = e_get_steps_left();
                 
-                e_set_speed_left(500);
-                e_set_speed_right(-500);
-                while (prevLeftSteps + 50 > leftSteps) {
-                    leftSteps = e_get_steps_left();
-                }
-                e_set_speed_left(0);
-                e_set_speed_right(0);
+                // e_set_speed_left(500);
+                // e_set_speed_right(-500);
+                // while (prevLeftSteps + 50 > leftSteps) {
+                //     leftSteps = e_get_steps_left();
+                // }
+                // e_set_speed_left(0);
+                // e_set_speed_right(0);
 			} else {
                 e_led_clear();
    		        nforward(fast);	
