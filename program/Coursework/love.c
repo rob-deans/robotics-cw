@@ -17,7 +17,7 @@
 
 //Main function of follower
 void love(void){
-	setUpCamera();
+	initCamera();
     e_start_agendas_processing();
     
    	long isVisible;
