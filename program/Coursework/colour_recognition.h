@@ -1,6 +1,8 @@
 #ifndef COLOUR
 #define COLOUR
 
+#define MIN_VOLUME = 1250;
+
 typedef enum {
 	red, green, blue
 } ColourType;
@@ -17,16 +19,33 @@ typedef enum {
 	small = 100, decent = 200, great = 500 // TODO: update decent name, can't think of anything rn
 } Length;
 
-void setUpCamera();
+typedef enum {
+    front, back, right, left, unknown
+} SoundLocation;
+
+// Camera
+void initCamera();
 void ngetImage();
 void nimage(ColourType, long*);
 int nturnDirection(void);
+int isCenter();
+
+// Movement
 void nturn(void);
 void nforward(Speed);
-int isCenter();
-int inProximity(Distance);
 void backward(Speed);
 void stop();
 void moveDistance(Length, Speed, Speed);
+
+// IR sensor
+int inProximity(Distance);
+
+// Sound
+int isSoundInFront(int, int);
+SoundLocation soundLocation();
+// int getVolume(int);
+
+// Utility
+void wait(int);
 
 #endif

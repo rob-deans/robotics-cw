@@ -36,16 +36,6 @@
 // 	e_set_speed_left(500);
 // 	e_set_speed_right(-500);	
 // }
-
-// // int checkProxSensor(int distance) {   
-// //     int proxData[2];
-
-// // 	// get one single sample for all 8 sensors
-// // 	proxData[0] = e_get_prox(0);
-// //     proxData[1] = e_get_prox(7);
-
-// //     // Detect obstacle_present on any of the 8 sensors
-// // 	long obstaclePresentFar = 0;
     
 // //     if(proxData[0] > distance || proxData[1] > distance) {
 // //         obstaclePresentFar = 1;
