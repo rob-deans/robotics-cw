@@ -127,6 +127,27 @@ void stop() {
 	e_set_speed_right(0);
 }
 
+void moveDistance(Length length, Speed leftSpeed, Speed rightSpeed) {
+
+    int prevRightSteps = 0;
+    int prevLeftSteps = 0;
+    int rightSteps = 0;        
+    int leftSteps = 0;
+    
+    rightSteps = prevRightSteps = e_get_steps_right();
+    leftSteps = prevLeftSteps = e_get_steps_left();
+    
+    e_set_speed_left(leftSpeed);
+    e_set_speed_right(rightSpeed);
+
+    while (prevLeftSteps + length > leftSteps) {
+        leftSteps = e_get_steps_left();
+    }
+
+    stop();
+
+}
+
 // Movement end //
 
 // IR sensor/proximity start
@@ -168,11 +189,11 @@ SoundLocation soundLocation() {
     }
 }
 
-// int getVolume(int min) {
-//     int m0, m1, m2;
-//     e_get_micro(&m0, &m1, &m2);
-//     return m0 > min || m1 > min || m2 > min;
-// }
+int getVolume(int min) {
+    int m0, m1, m2;
+    e_get_micro(&m0, &m1, &m2);
+    return m0 > min || m1 > min || m2 > min;
+}
 
 // Sound end //
 
@@ -184,3 +205,4 @@ void wait(int time) {
 }
 
 // Utility end
+
