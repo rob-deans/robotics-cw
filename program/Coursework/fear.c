@@ -19,11 +19,11 @@
 #include "./colour_recognition.h"
 
 
-int getVolume(int min) {
-    int m0, m1, m2;
-    e_get_micro(&m0, &m1, &m2);
-    return m0 > min || m1 > min || m2 > min;
-}
+// int getVolume(int min) {
+//     int m0, m1, m2;
+//     e_get_micro(&m0, &m1, &m2);
+//     return m0 > min || m1 > min || m2 > min;
+// }
 
 void playSound() {
     e_play_sound(11028, 8016);

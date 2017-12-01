@@ -189,11 +189,11 @@ SoundLocation soundLocation() {
     }
 }
 
-// int getVolume(int min) {
-//     int m0, m1, m2;
-//     e_get_micro(&m0, &m1, &m2);
-//     return m0 > min || m1 > min || m2 > min;
-// }
+int getVolume(int min) {
+    int m0, m1, m2;
+    e_get_micro(&m0, &m1, &m2);
+    return m0 > min || m1 > min || m2 > min;
+}
 
 // Sound end //
 

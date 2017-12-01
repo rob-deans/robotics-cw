@@ -11,19 +11,18 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
-#include <codec/e_sound.h>
+#include "codec/e_sound.h"
 
-#include "./findRed.h"
-#include "./colour_recognition.h"
+#include "aggressive.h"
+#include "colour_recognition.h"
 
 void angryFlash(void) {
-	long i;
+
 	e_set_led(0,1);
 	e_set_led(1,1);
 	e_set_led(7,1);
 
-	for(i=0;i<300000;i++)
-			asm("nop");
+	wait(5000);
 
 	e_set_led(0,0);
 	e_set_led(1,0);

@@ -35,37 +35,6 @@ void love(void){
                 moveDistance(decent, nmedium, medium);
                 moveDistance(small, medium, nmedium);
 
-                // rightSteps = prevRightSteps = e_get_steps_right();
-                // leftSteps = prevLeftSteps = e_get_steps_left();
-                
-
-                // e_set_speed_left(500);
-                // e_set_speed_right(-500);
-                // while (prevLeftSteps + 50 > leftSteps) {
-                //     leftSteps = e_get_steps_left();
-                // }
-                // e_set_speed_left(0);
-                // e_set_speed_right(0);
-                
-                // rightSteps = prevRightSteps = e_get_steps_right();
-                // leftSteps = prevLeftSteps = e_get_steps_left();
-
-                // e_set_speed_left(-500);
-                // e_set_speed_right(500);
-                // while (prevRightSteps + 100 > rightSteps) {
-                //     rightSteps = e_get_steps_right();
-                // }
-                
-                // rightSteps = prevRightSteps = e_get_steps_right();
-                // leftSteps = prevLeftSteps = e_get_steps_left();
-                
-                // e_set_speed_left(500);
-                // e_set_speed_right(-500);
-                // while (prevLeftSteps + 50 > leftSteps) {
-                //     leftSteps = e_get_steps_left();
-                // }
-                // e_set_speed_left(0);
-                // e_set_speed_right(0);
 			} else {
                 e_led_clear();
    		        nforward(fast);	
@@ -74,11 +43,6 @@ void love(void){
             e_led_clear();
             stop();
         }
-
-//        } else {
-//			e_led_clear();
-//            __stop();
-//		}
 
 	}
 }

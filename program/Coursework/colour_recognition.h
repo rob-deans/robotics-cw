@@ -1,7 +1,7 @@
 #ifndef COLOUR
 #define COLOUR
 
-#define MIN_VOLUME = 1250;
+#define MIN_VOLUME = 1400;
 
 typedef enum {
 	red, green, blue
@@ -16,7 +16,7 @@ typedef enum {
 } Distance;
 
 typedef enum {
-	small = 100, decent = 200, great = 500 // TODO: update decent name, can't think of anything rn
+	small = 100, decent = 200, great = 500, ultimate =  1500 // TODO: update decent name, can't think of anything rn
 } Length;
 
 typedef enum {
@@ -43,7 +43,7 @@ int inProximity(Distance);
 // Sound
 int isSoundInFront(int, int);
 SoundLocation soundLocation();
-// int getVolume(int);
+int getVolume(int);
 
 // Utility
 void wait(int);
