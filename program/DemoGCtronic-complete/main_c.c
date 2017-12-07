@@ -58,6 +58,7 @@ char c;
 #include "fear.h"
 #include "love.h"
 #include "curious.h"
+#include "push.h"
 
 
 #define PI 3.14159265358979
@@ -98,6 +99,9 @@ int main() {
         case 2: fear(); break;
         case 3: aggressive(); break;
         case 4: curious(); break;
+        case 5: push(); break;
+        case 6: listen(); break;
+        case 7: run_accelerometer(); break;
     }
 
 	while(1);

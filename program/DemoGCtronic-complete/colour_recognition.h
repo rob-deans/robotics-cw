@@ -47,6 +47,6 @@ int getVolume(int);
 void calibrateMic();
 
 // Utility
-void wait(int);
+// void wait(int);
 
 #endif
