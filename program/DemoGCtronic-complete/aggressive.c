@@ -37,31 +37,21 @@ void aggressive(void){
 
 	e_start_agendas_processing();
 
-//	e_init_sound();
+//	e_init_sound();  // TODO: Uncomment for the demo
 	long isVisible;
 
-	while(1){
+	while(1) {
 		ngetImage();
 		nimage(blue, &isVisible);
 		e_led_clear();
-		
-		if(isCenter()) {
 
+		if(isVisible && isCenter()) {
 			e_destroy_agenda(nturn);
 			nforward(slow);
 			angryFlash();
-//			e_play_sound(0, 2112);
-
-		}else if(isVisible == 1){
-
-			e_activate_agenda(nturn, 650);
-
+//			e_play_sound(0, 2112);  // TODO: Uncomment for the demo
 		} else {
-
-			e_destroy_agenda(nturn);
-			e_set_speed_left (0);
-			e_set_speed_right(0);
-
+			e_activate_agenda(nturn, 650);			
 		}
 	}
 }
