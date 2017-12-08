@@ -59,7 +59,7 @@ char c;
 #include "love.h"
 #include "curious.h"
 #include "push.h"
-
+#include "test.h"
 
 #define PI 3.14159265358979
 
@@ -101,7 +101,7 @@ int main() {
         case 4: curious(); break;
         case 5: push(); break;
         case 6: listen(); break;
-        case 7: run_accelerometer(); break;
+        case 7: test(); break;
     }
 
 	while(1);

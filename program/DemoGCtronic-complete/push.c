@@ -43,7 +43,7 @@ void push() {
 	// Init sound
 	// e_init_acc();
 	e_init_motors();
-	// e_init_sound();
+	e_init_sound();
 
 	// Calibrate accelerometers
 	e_set_led(8, 1);
@@ -60,17 +60,17 @@ void push() {
 
 			accy-=naccy0; // calculate the relative value
 
-			sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
-			e_send_uart1_char(buffer, strlen(buffer));
+			// sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
+			// e_send_uart1_char(buffer, strlen(buffer));
 
 			// sometimes if it crashes it actually goes above 250 or so checking
 			// that as well as deacceleration
 			if(accy < -250 || accy > 250) { // take average?
 				stop();
 
-				// e_play_sound(2116, 1760);
+    			// e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
 
-				wait(5000);
+				nwait(1000000); // bugged, doesn't wait that long, increase? >100000
 
 				_listen(_pushObject);
 			}
@@ -78,12 +78,17 @@ void push() {
 	}
 }
 
+void navigate() {
+	
+}
+
 void listen() {
 	_listen(push);
 }
 
 void _pushObject() {
-	nforward(medium);
+	// e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
+	nforward(fast);
 	while(1);
 }
 
@@ -95,7 +100,7 @@ void _listen(void (*foo)()) {
     offsetVol0 = e_get_micro_volume(0);
     offsetVol1 = e_get_micro_volume(1);
     offsetVol2 = e_get_micro_volume(2);
-    int VOLUME_THR = 1250;
+    int VOLUME_THR = 200;
 
 	while(1) {
 		vol0 = e_get_micro_volume(0)-offsetVol0;

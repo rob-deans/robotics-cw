@@ -2,6 +2,7 @@
 #define COLOUR
 
 #define MIN_VOLUME = 1400;
+#define FULL_SPIN_STEPS 1300
 
 typedef enum {
 	red, green, blue
@@ -19,9 +20,13 @@ typedef enum {
 	small = 100, decent = 200, great = 500, ultimate =  1500 // TODO: update decent name, can't think of anything rn
 } Length;
 
+// typedef enum {
+//     front, back, right, left, unknown
+// } SoundLocation;
+
 typedef enum {
-    front, back, right, left, unknown
-} SoundLocation;
+	left = 5, right = 2, front = 7, back = 4
+} Direction;
 
 // Camera
 void initCamera();
@@ -39,14 +44,15 @@ void moveDistance(Length, Speed);
 
 // IR sensor
 int inProximity(Distance);
+int inProximity_v2(Distance, Direction);
 
 // Sound
 int isSoundInFront(int, int);
-SoundLocation soundLocation();
+// SoundLocation soundLocation();
 int getVolume(int);
 void calibrateMic();
 
 // Utility
-// void wait(int);
+void nwait(long);
 
 #endif
