@@ -26,7 +26,7 @@ void nacc_calibrate() {
 
 	saccy=0;
 	for (i=0; i<32; i++) {
-		accy=e_get_acc(1);
+		accy=e_read_acc_y();
 		saccy+=accy;
 		wait(3000);
 	}
@@ -35,7 +35,7 @@ void nacc_calibrate() {
 }
 
 //Main function of follower
-void push(void) {
+void push() {
 
 	int accy;
 	extern char buffer[60];
@@ -43,7 +43,7 @@ void push(void) {
 	// Init sound
 	// e_init_acc();
 	e_init_motors();
-	e_init_sound();
+	// e_init_sound();
 
 	// Calibrate accelerometers
 	e_set_led(8, 1);
@@ -54,49 +54,41 @@ void push(void) {
 	nforward(fast);
 
 	while (1) {
-		// Read accelerometer
-		//gil e_get_acc(&accx, &accy, &accz);
-		// accx=e_get_acc(0);
-		accy=e_get_acc(1);
+		// only start checking the acc when close to an object
+		if(inProximity(close)) {
+			accy=e_read_acc_y(); // read the y axis acc i.e. the forward/back axis
 
-		accy-=naccy0;
+			accy-=naccy0; // calculate the relative value
 
+			sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
+			e_send_uart1_char(buffer, strlen(buffer));
 
-		// sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
-		// e_send_uart1_char(buffer, strlen(buffer));
+			// sometimes if it crashes it actually goes above 250 or so checking
+			// that as well as deacceleration
+			if(accy < -250 || accy > 250) { // take average?
+				stop();
 
-		if(accy < -150) { // take average?
-			stop();
-			e_play_sound(2116, 1760);
-			int vol0=0, vol1=0, vol2=0;
-		    int offsetVol0=0, offsetVol1=0, offsetVol2=0;
+				// e_play_sound(2116, 1760);
 
-		    offsetVol0 = e_get_micro_volume(0);
-		    offsetVol1 = e_get_micro_volume(1);
-		    offsetVol2 = e_get_micro_volume(2);
-		    int VOLUME_THR = 1250;
+				wait(5000);
 
-			while(1) {
-				vol0 = e_get_micro_volume(0)-offsetVol0;
-		        vol1 = e_get_micro_volume(1)-offsetVol1;
-		        vol2 = e_get_micro_volume(2)-offsetVol2;
-
-		        if(vol0 > VOLUME_THR || vol2 > VOLUME_THR || vol2 > VOLUME_THR) {
-					nforward(medium);
-		        	while(1);
-		        }
+				_listen(_pushObject);
 			}
 		}
-		// sprintf(buffer, "Calibration values: %d, %d, %d\r\n", accy);
-		// e_send_uart1_char(buffer, strlen(buffer));
 	}
 }
 
+void listen() {
+	_listen(push);
+}
 
+void _pushObject() {
+	nforward(medium);
+	while(1);
+}
 
-
-void listen(void) {
-
+// pass in a function that we want to run when we get over a certain limit
+void _listen(void (*foo)()) {
 	int vol0=0, vol1=0, vol2=0;
     int offsetVol0=0, offsetVol1=0, offsetVol2=0;
 
@@ -111,7 +103,9 @@ void listen(void) {
         vol2 = e_get_micro_volume(2)-offsetVol2;
 
         if(vol0 > VOLUME_THR || vol2 > VOLUME_THR || vol2 > VOLUME_THR) {
-			push();
+			(*foo)(); // the function when it is loud enough
         }
 	}
 }
+
+

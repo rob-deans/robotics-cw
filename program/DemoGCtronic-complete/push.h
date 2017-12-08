@@ -1,7 +1,9 @@
 #ifndef _PUSH
 #define _PUSH
 
-void push(void);
-void listen(void);
+void push();
+void listen();
+void _listen(void (*foo)());
+void _pushObject();
 	
 #endif
