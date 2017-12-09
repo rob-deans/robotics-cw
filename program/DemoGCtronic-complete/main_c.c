@@ -77,6 +77,9 @@ int main() {
 	e_init_port();    // configure port pins      
 	e_start_agendas_processing();
     e_init_motors();
+    e_init_sound();
+    // e_play_sound(11028, 8016);
+
 	e_init_uart1();   // initialize UART to 115200 Kbaud
 	e_init_uart2(BAUD115200);   // initialize UART to 115200 Kbaud
 	e_init_ad_scan(ALL_ADC);

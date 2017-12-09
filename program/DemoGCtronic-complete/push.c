@@ -15,6 +15,7 @@
 #include <a_d/advance_ad_scan/e_micro.h>
 
 #include "push.h"
+#include "test.h"
 #include "colour_recognition.h"
 
 int naccy0;
@@ -42,8 +43,6 @@ void push() {
 
 	// Init sound
 	// e_init_acc();
-	e_init_motors();
-	e_init_sound();
 
 	// Calibrate accelerometers
 	e_set_led(8, 1);
@@ -65,12 +64,12 @@ void push() {
 
 			// sometimes if it crashes it actually goes above 250 or so checking
 			// that as well as deacceleration
-			if(accy < -250 || accy > 250) { // take average?
+			if(accy < -300 || accy > 250) { // take average?
 				stop();
 
-    			// e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
+    			e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
 
-				nwait(1000000); // bugged, doesn't wait that long, increase? >100000
+				// nwait(1000000); // bugged, doesn't wait that long, increase? >100000
 
 				_listen(_pushObject);
 			}
@@ -79,11 +78,14 @@ void push() {
 }
 
 void navigate() {
-	
+	test();
+	e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
+	wait(5000);
+	_pushObject();
 }
 
 void listen() {
-	_listen(push);
+	_listen(navigate);
 }
 
 void _pushObject() {
@@ -109,6 +111,7 @@ void _listen(void (*foo)()) {
 
         if(vol0 > VOLUME_THR || vol2 > VOLUME_THR || vol2 > VOLUME_THR) {
 			(*foo)(); // the function when it is loud enough
+			break;
         }
 	}
 }

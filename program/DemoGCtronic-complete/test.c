@@ -22,15 +22,17 @@ void test() {
     	if(inProximity_v2(close, front)) {
     		// turn right
     		stop();
-    		nturnRight();
-
-    		followLeft();
+    		break;
     	}
     }
 
-    // when we have first got into front proximity
-	
+	nturnRight();
 
+	wait(5000);
+
+	while(inProximity_v2(close, left)) {
+		followLeft();	
+	}
 }
 
 void nturnRight() {
@@ -39,20 +41,41 @@ void nturnRight() {
 	e_set_speed_left(500);
 	e_set_speed_right(-500);
 
-	while(e_get_steps_left() < initSteps + (FULL_SPIN_STEPS / 4)) {}
+	while(e_get_steps_left() < initSteps + (FULL_SPIN_STEPS / 4));
+
+	stop();
+}
+
+void nturnLeft() {
+	int initSteps = e_get_steps_right();
+
+	e_set_speed_left(-500);
+	e_set_speed_right(500);
+
+	while(e_get_steps_right() < initSteps + (FULL_SPIN_STEPS / 4));
 
 	stop();
 }
 
 void followLeft() {
+	nforward(medium);
 	while(1) {
+		if(inProximity_v2(medium, front)) {
+			nturnLeft();
+			stop();
+
+			break;
+		}
 		if(inProximity_v2(close, left)) {
 			e_set_led(6, 1);
-			// nforward(medium);  // what the fuuuuuuuuuuuuuuuuu
 		} else {
 			e_set_led(6, 0);
-			// stop();
-			nforward(medium);  // what the fuuuuuuuuuuuuuuuuu
+			moveDistance(h_length, medium);
+			nturnLeft();
+			nforward(medium);
+			while(!inProximity_v2(close, left));
+			stop();
+			break;
 		}
 	}
 }
