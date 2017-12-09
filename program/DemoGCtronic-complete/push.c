@@ -15,6 +15,7 @@
 #include <a_d/advance_ad_scan/e_micro.h>
 
 #include "push.h"
+#include "test.h"
 #include "colour_recognition.h"
 
 int naccy0;
@@ -42,8 +43,6 @@ void push() {
 
 	// Init sound
 	// e_init_acc();
-	e_init_motors();
-	// e_init_sound();
 
 	// Calibrate accelerometers
 	e_set_led(8, 1);
@@ -60,30 +59,37 @@ void push() {
 
 			accy-=naccy0; // calculate the relative value
 
-			sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
-			e_send_uart1_char(buffer, strlen(buffer));
-
 			// sometimes if it crashes it actually goes above 250 or so checking
 			// that as well as deacceleration
-			if(accy < -250 || accy > 250) { // take average?
+			if(accy < -300 || accy > 250) { // take average?
 				stop();
 
-				// e_play_sound(2116, 1760);
+				e_play_sound(11028, 8016);
 
-				wait(5000);
-
-				_listen(_pushObject);
+				while(1) {
+					if(inProximity_v2(close, left)) {
+						e_set_led(6, 1);
+						nwait(1000000);
+						e_play_sound(11028, 8016);
+						_pushObject();
+					}
+				}
 			}
 		}
 	}
 }
 
+void navigate() {
+	test();
+	_listen(_pushObject);
+}
+
 void listen() {
-	_listen(push);
+	_listen(navigate);
 }
 
 void _pushObject() {
-	nforward(medium);
+	nforward(fast);
 	while(1);
 }
 
@@ -95,7 +101,8 @@ void _listen(void (*foo)()) {
     offsetVol0 = e_get_micro_volume(0);
     offsetVol1 = e_get_micro_volume(1);
     offsetVol2 = e_get_micro_volume(2);
-    int VOLUME_THR = 1250;
+    int VOLUME_THR = 30;
+	extern char buffer[60];
 
 	while(1) {
 		vol0 = e_get_micro_volume(0)-offsetVol0;
@@ -104,6 +111,7 @@ void _listen(void (*foo)()) {
 
         if(vol0 > VOLUME_THR || vol2 > VOLUME_THR || vol2 > VOLUME_THR) {
 			(*foo)(); // the function when it is loud enough
+			break;
         }
 	}
 }
