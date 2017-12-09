@@ -2,7 +2,7 @@
 #define COLOUR
 
 #define MIN_VOLUME = 1400;
-#define FULL_SPIN_STEPS 1250
+#define FULL_SPIN_STEPS 1300
 
 typedef enum {
 	red, green, blue
@@ -13,11 +13,11 @@ typedef enum {
 } Speed;
 
 typedef enum {
-	close = 600, far = 100
+	close = 600, dmedium = 300, far = 100
 } Distance;
 
 typedef enum {
-	h_length = 325, length = 650, great = 500, ultimate =  1500 // TODO: update decent name, can't think of anything rn
+	h_length = 300, length = 550, great = 400, ultimate =  1400 // TODO: update decent name, can't think of anything rn
 } Length;
 
 // typedef enum {

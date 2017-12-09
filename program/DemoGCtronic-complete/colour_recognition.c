@@ -133,18 +133,23 @@ void stop() {
 // Moves a certain distance forward or backward not turning
 void moveDistance(Length length, Speed speed) {
     
-    int prevLeftSteps = 0;
-    int leftSteps = 0;
+    // int prevLeftSteps = 0;
+    // int leftSteps = 0;
 
-    leftSteps = prevLeftSteps = e_get_steps_left();
+    // leftSteps = prevLeftSteps = e_get_steps_left();
     
-    e_set_speed_left(speed);
-    e_set_speed_right(speed);
+    // e_set_speed_left(speed);
+    // e_set_speed_right(speed);
 
-    while (prevLeftSteps + length > leftSteps) {
-        leftSteps = e_get_steps_left();
-    }
+    // while (prevLeftSteps + length > leftSteps) {
+    //     leftSteps = e_get_steps_left();
+    // }
 
+    // stop();
+
+    int initSteps = e_get_steps_left();
+    nforward(speed);
+    while(e_get_steps_left() < initSteps + length);
     stop();
 
 }

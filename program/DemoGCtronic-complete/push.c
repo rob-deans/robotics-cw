@@ -59,19 +59,21 @@ void push() {
 
 			accy-=naccy0; // calculate the relative value
 
-			// sprintf(buffer, "Acc y values: %d, %d \r\n", accy, naccy0);
-			// e_send_uart1_char(buffer, strlen(buffer));
-
 			// sometimes if it crashes it actually goes above 250 or so checking
 			// that as well as deacceleration
 			if(accy < -300 || accy > 250) { // take average?
 				stop();
 
-    			e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
+				e_play_sound(11028, 8016);
 
-				// nwait(1000000); // bugged, doesn't wait that long, increase? >100000
-
-				_listen(_pushObject);
+				while(1) {
+					if(inProximity_v2(close, left)) {
+						e_set_led(6, 1);
+						nwait(1000000);
+						e_play_sound(11028, 8016);
+						_pushObject();
+					}
+				}
 			}
 		}
 	}
@@ -79,9 +81,7 @@ void push() {
 
 void navigate() {
 	test();
-	e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
-	wait(5000);
-	_pushObject();
+	_listen(_pushObject);
 }
 
 void listen() {
@@ -89,7 +89,6 @@ void listen() {
 }
 
 void _pushObject() {
-	// e_play_sound(11028, 8016); // TODO: Uncomment when ready (for the trigger)
 	nforward(fast);
 	while(1);
 }
@@ -102,7 +101,8 @@ void _listen(void (*foo)()) {
     offsetVol0 = e_get_micro_volume(0);
     offsetVol1 = e_get_micro_volume(1);
     offsetVol2 = e_get_micro_volume(2);
-    int VOLUME_THR = 200;
+    int VOLUME_THR = 30;
+	extern char buffer[60];
 
 	while(1) {
 		vol0 = e_get_micro_volume(0)-offsetVol0;

@@ -41,7 +41,7 @@ void nturnRight() {
 	e_set_speed_left(500);
 	e_set_speed_right(-500);
 
-	while(e_get_steps_left() < initSteps + (FULL_SPIN_STEPS / 4));
+	while(e_get_steps_left() < initSteps + (FULL_SPIN_STEPS / 4) - 10);
 
 	stop();
 }
@@ -52,7 +52,7 @@ void nturnLeft() {
 	e_set_speed_left(-500);
 	e_set_speed_right(500);
 
-	while(e_get_steps_right() < initSteps + (FULL_SPIN_STEPS / 4));
+	while(e_get_steps_right() < initSteps + (FULL_SPIN_STEPS / 4) - 10);
 
 	stop();
 }
@@ -60,14 +60,15 @@ void nturnLeft() {
 void followLeft() {
 	nforward(medium);
 	while(1) {
-		if(inProximity_v2(medium, front)) {
+		if(inProximity_v2(dmedium, front)) {
 			nturnLeft();
 			stop();
-
 			break;
 		}
+
 		if(inProximity_v2(close, left)) {
 			e_set_led(6, 1);
+			// moveDistance(h_length, medium);
 		} else {
 			e_set_led(6, 0);
 			moveDistance(h_length, medium);
