@@ -133,18 +133,23 @@ void stop() {
 // Moves a certain distance forward or backward not turning
 void moveDistance(Length length, Speed speed) {
     
-    int prevLeftSteps = 0;
-    int leftSteps = 0;
+    // int prevLeftSteps = 0;
+    // int leftSteps = 0;
 
-    leftSteps = prevLeftSteps = e_get_steps_left();
+    // leftSteps = prevLeftSteps = e_get_steps_left();
     
-    e_set_speed_left(speed);
-    e_set_speed_right(speed);
+    // e_set_speed_left(speed);
+    // e_set_speed_right(speed);
 
-    while (prevLeftSteps + length > leftSteps) {
-        leftSteps = e_get_steps_left();
-    }
+    // while (prevLeftSteps + length > leftSteps) {
+    //     leftSteps = e_get_steps_left();
+    // }
 
+    // stop();
+
+    int initSteps = e_get_steps_left();
+    nforward(speed);
+    while(e_get_steps_left() < initSteps + length);
     stop();
 
 }
@@ -155,10 +160,22 @@ void moveDistance(Length length, Speed speed) {
 
 int inProximity(Distance d) {
 
-	int frontLeft = e_get_prox(7);;
+	int frontLeft = e_get_prox(7);
 	int frontRight = e_get_prox(0);	
 
 	return frontRight > d || frontLeft > d;
+}
+
+int inProximity_v2(Distance d, Direction dir) {
+
+    // if we are after the front prox - need to use both sensors (see above)
+    if(dir == front) {
+        return inProximity(d);
+    }
+
+    int prox = e_get_prox(dir); 
+
+    return prox > d;
 }
 
 // IR sensor/proxmity end //
@@ -170,35 +187,35 @@ int isSoundPerpendicular(int m0, int m1) {
 }
 
 // Again not sure if this will work
-SoundLocation soundLocation() {
-    int vol = 0;
-    e_get_micro(&m0, &m1, &m2);
+// SoundLocation soundLocation() {
+//     int vol = 0;
+//     e_get_micro(&m0, &m1, &m2);
     
-    m0 = m0 - micCalibration[0];
-    m1 = m1 - micCalibration[1];
-    m2 = m2 - micCalibration[2];
+//     m0 = m0 - micCalibration[0];
+//     m1 = m1 - micCalibration[1];
+//     m2 = m2 - micCalibration[2];
    
     
-    if (m0 > vol || m1 > vol || m2 > vol) {
-        // Check if roughly center
-        if(isSoundPerpendicular(m0, m1)) {
-            if (m2 > m0 || m2 > m1) {
-                return back;
-            }
-            return front;
-        } else {
-            if(m0 > m1) {
-                return right;
-            } else if(m1 > m0) {
-                return left;
-            } else {
-//                return unknown;
-            }
-        }
-    } else {
-        return unknown;
-    }
-}
+//     if (m0 > vol || m1 > vol || m2 > vol) {
+//         // Check if roughly center
+//         if(isSoundPerpendicular(m0, m1)) {
+//             if (m2 > m0 || m2 > m1) {
+//                 return back;
+//             }
+//             return front;
+//         } else {
+//             if(m0 > m1) {
+//                 return right;
+//             } else if(m1 > m0) {
+//                 return left;
+//             } else {
+// //                return unknown;
+//             }
+//         }
+//     } else {
+//         return unknown;
+//     }
+// }
 
 int getVolume(int min) {
     e_get_micro(&m0, &m1, &m2);
@@ -213,4 +230,11 @@ void calibrateMic() {
     micCalibration[2] = m2;
 }
 
+// Sound end
 
+// Utility
+
+void nwait(long time) {
+    long i;
+    for(i=0;i<time;i++) { asm("nop"); }
+}

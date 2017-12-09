@@ -58,7 +58,8 @@ char c;
 #include "fear.h"
 #include "love.h"
 #include "curious.h"
-
+#include "push.h"
+#include "test.h"
 
 #define PI 3.14159265358979
 
@@ -76,6 +77,9 @@ int main() {
 	e_init_port();    // configure port pins      
 	e_start_agendas_processing();
     e_init_motors();
+    e_init_sound();
+    // e_play_sound(11028, 8016);
+
 	e_init_uart1();   // initialize UART to 115200 Kbaud
 	e_init_uart2(BAUD115200);   // initialize UART to 115200 Kbaud
 	e_init_ad_scan(ALL_ADC);
@@ -90,38 +94,7 @@ int main() {
 	selector=getselector();
 	sprintf(buffer, "Selector pos %d\r\n", selector);
 	e_send_uart1_char(buffer, strlen(buffer));
-	while(e_uart1_sending());
-
-
-//	if (selector==0) {
-////		run_accelerometer();
-//	} else if (selector==1) {
-////        run_detectsound();
-//	} else if (selector==2) {
-////		run_wallfollow();
-//        love();
-//	} else if (selector==3) {
-////		run_asercom();		// advanced sercom protocol
-//	} else if (selector==4) {	// let the robot move in a square shape
-////            run_square();
-//	} else if (selector==5) {	// sensor "feedback display"
-////		run_SensDispl();
-//	} else if (selector==6) {	// camera point to light
-////		run_CameraTurn();
-//	} else if (selector==7) {	// act like the ASL RS232 - I2C translator
-////		run_translatorI2C();
-//	} else if (selector==8) {	
-////		run_grounddirection();
-//    } else if (selector==9) {   // exploit gyroscope
-////            run_gyroscope();
-//	} else if (selector==9) {
-////		run_breitenberg_follower();
-//	} else if (selector==15) {	// simple dust cleaner behaviour
-////		run_DustCleaner();
-//	} else {
-////		run_breitenberg_shocker();
-//	}
-    
+	while(e_uart1_sending());    
     
     switch(selector) {
         case 0: break;
@@ -129,6 +102,9 @@ int main() {
         case 2: fear(); break;
         case 3: aggressive(); break;
         case 4: curious(); break;
+        case 5: push(); break;
+        case 6: listen(); break;
+        case 7: test(); break;
     }
 
 	while(1);

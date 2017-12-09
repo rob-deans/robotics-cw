@@ -1,4 +1,3 @@
-
 #include "rundetectsound.h"
 #include "p30F6014A.h"
 #include <a_d/advance_ad_scan/e_micro.h>
