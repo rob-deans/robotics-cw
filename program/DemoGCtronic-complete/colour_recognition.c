@@ -172,10 +172,8 @@ int inProximity_v2(Distance d, Direction dir) {
     if(dir == front) {
         return inProximity(d);
     }
-
-    int prox = e_get_prox(dir); 
-
-    return prox > d;
+    
+    return e_get_prox(dir) > d;
 }
 
 // IR sensor/proxmity end //

@@ -13,26 +13,20 @@
 #include <a_d/advance_ad_scan/e_prox.h>
 
 #include "colour_recognition.h"
+#include "test.h"
 
-void test() {
+void test() {  // rename this
 
     e_start_agendas_processing();
-    nforward(medium);
-    while(1) {
-    	if(inProximity_v2(close, front)) {
-    		// turn right
-    		stop();
-    		break;
-    	}
-    }
 
-	nturnRight();
-
-	wait(5000);
-
-	while(inProximity_v2(close, left)) {
-		followLeft();	
+	while(checkLeft()) {
+		followLeft();
 	}
+}
+
+// may need to change this in the end
+int checkLeft() {
+	return e_get_prox(5) > 1000;
 }
 
 void nturnRight() {
@@ -62,19 +56,16 @@ void followLeft() {
 	while(1) {
 		if(inProximity_v2(dmedium, front)) {
 			nturnLeft();
-			stop();
 			break;
 		}
 
-		if(inProximity_v2(close, left)) {
-			e_set_led(6, 1);
-			// moveDistance(h_length, medium);
-		} else {
+		if(!checkLeft()) {
 			e_set_led(6, 0);
+			e_set_led(2, 1);
 			moveDistance(h_length, medium);
 			nturnLeft();
 			nforward(medium);
-			while(!inProximity_v2(close, left));
+			while(!checkLeft());
 			stop();
 			break;
 		}
