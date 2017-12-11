@@ -16,6 +16,7 @@
 
 #include "push.h"
 #include "test.h"
+#include "wallfollow.h"
 #include "colour_recognition.h"
 
 int naccy0;
@@ -41,9 +42,6 @@ void push() {
 	int accy;
 	extern char buffer[60];
 
-	// Init sound
-	// e_init_acc();
-
 	// Calibrate accelerometers
 	e_set_led(8, 1);
 	nacc_calibrate();
@@ -61,13 +59,15 @@ void push() {
 
 			// sometimes if it crashes it actually goes above 250 or so checking
 			// that as well as deacceleration
-			if(accy < -300 || accy > 250) { // take average?
+			// SOMEONE FIDDLE WITH -300 AND 250 SO IT CAN PUSH THE EMPTY BOX BUT NOT WITH
+			// SAY A PHONE ON IT
+			if(accy < -500 || accy > 250) { 
 				stop();
 
 				e_play_sound(11028, 8016);
 
 				while(1) {
-					if(inProximity_v2(close, left)) {
+					if(checkLeft()) {
 						e_set_led(6, 1);
 						nwait(1000000);
 						e_play_sound(11028, 8016);
@@ -80,7 +80,27 @@ void push() {
 }
 
 void navigate() {
+	// spin
+	e_set_speed_left(500);
+	e_set_speed_right(-500);
+	// until we see the colour red
+	long isVisible;
+	initCamera();
+	while(1) {
+		ngetImage();
+		nimage(red, &isVisible);
+
+		// we have seen red and it is in the middle
+		if(isVisible && isCenter()) {
+			stop();
+			break; // break out of the loop to start the wall following
+		}
+	}
+	// parrallel park
+	wallfollow();
+	// navigate the wall
 	test();
+	// listen to push 
 	_listen(_pushObject);
 }
 

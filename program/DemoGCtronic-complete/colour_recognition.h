@@ -48,7 +48,6 @@ int inProximity_v2(Distance, Direction);
 
 // Sound
 int isSoundInFront(int, int);
-// SoundLocation soundLocation();
 int getVolume(int);
 void calibrateMic();
 
