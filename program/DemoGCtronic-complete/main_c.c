@@ -43,7 +43,6 @@ char c;
 #define SPEED_IR 600
 #endif 
 #include "runaccelerometer.h"
-#include "runbreitenberg_adv.h"
 #include "runwallfollow.h"
 #include "rungrounddirection.h"
 #include <utility/utility.h>

@@ -42,8 +42,8 @@ void love(void){
         e_set_led(0, 1);
         sprintf(buffer, "fl, ifl, fr, ifr %d, %d, %d, %d\r\n", frontLeft, initFrontLeft, frontRight, initFrontRight);
         e_send_uart1_char(buffer, strlen(buffer));
-		if((isVisible && isCenter()) || wasVisible) {
-            ngetImage();
+		if((isVisible) || wasVisible) {
+
 			// It is red and in the center
 			if(frontRight > 750 || frontLeft > 750) {
 

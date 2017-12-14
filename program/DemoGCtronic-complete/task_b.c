@@ -230,8 +230,6 @@ void run_breitenberg_shocker(void)
 	int centreValue;
 
 	e_init_sound();
-	e_init_ad_scan(ALL_ADC);
-	e_init_motors();
 	
 
 	long isVisible;
@@ -240,9 +238,8 @@ void run_breitenberg_shocker(void)
 		ngetImage();
 		nimage(red, &isVisible);
 		e_led_clear();
-			
-		e_activate_agenda(flow_led, 900);
-		e_activate_agenda(shock_neuron, 650);
+
+		shock_neuron();
 
 		if(isCenter() && isVisible){ //If blue is not in the middle then it will go avoid
 			//e_end_agendas_processing();			

@@ -39,7 +39,7 @@ void curious() {
             ngetImage();
             // Puck is spinning... 
             nimage(red, &isVisible);
-            if (isVisible && isCenter()) {              
+            if (isVisible) {              
                 stop();
                 break;
             }

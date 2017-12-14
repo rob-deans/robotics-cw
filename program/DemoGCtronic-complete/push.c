@@ -58,7 +58,7 @@ void push() {
 
 			accy-=naccy0; // calculate the relative value
 
-			if(accy < -250 || accy > 250) { 
+			if(accy < -150 || accy > 250) { 
 				stop();
 
 				e_play_sound(11028, 8016);
