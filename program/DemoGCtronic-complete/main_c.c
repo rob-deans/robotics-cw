@@ -59,7 +59,7 @@ char c;
 #include "love.h"
 #include "curious.h"
 #include "push.h"
-#include "test.h"
+#include "task_b.h"
 #include "helpers.h"
 
 #define PI 3.14159265358979
@@ -105,7 +105,7 @@ int main() {
         case 4: curious(); break;
         case 5: push(); break;    // high level behaviour
         case 6: listen(); break;  // high level behaviour
-        case 7: test(); break;
+        case 7: run_breitenberg_shocker(); break;
     }
 
 	while(1);

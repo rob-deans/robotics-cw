@@ -1,7 +1,7 @@
 /********************************************************************************
 
 			Programm to follow/avoid obstacles					          
-			Version 2.0 août 2007				                          
+			Version 2.0 aoï¿½t 2007				                          
 			Michael Bonani, Jonathan Besuchet
 
 
@@ -49,19 +49,33 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
  * \author Code: Michael Bonani, Jonathan Besuchet \n Doc: Jonathan Besuchet
  */
 
-#include <motor_led/e_init_port.h>
-#include <motor_led/advance_one_timer/e_motors.h>
-#include <motor_led/advance_one_timer/e_led.h>
-#include <motor_led/advance_one_timer/e_agenda.h>
-#include <uart/e_uart_char.h>
-#include <a_d/advance_ad_scan/e_ad_conv.h>
-#include <a_d/advance_ad_scan/e_prox.h>
+#include "motor_led/e_init_port.h"
+#include "motor_led/advance_one_timer/e_motors.h"
+#include "motor_led/advance_one_timer/e_led.h"
+#include "motor_led/advance_one_timer/e_agenda.h"
+#include "uart/e_uart_char.h"
+#include "a_d/advance_ad_scan/e_ad_conv.h"
+#include "a_d/advance_ad_scan/e_prox.h"
 
-#include "./runbreitenberg_adv.h"
+#include "motor_led/e_epuck_ports.h"
+#include "camera/fast_2_timer/e_poxxxx.h"
+#include "motor_led/e_epuck_ports.h"
+
+
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+#include <codec/e_sound.h>
+
+#include "helpers.h"
 
 #define PROXSCALING_FOLLOW 20
 #define PROXSCALING_SHOCK 4
 #define BASICSPEED 550
+
+char gbuffer[160];
+int gnumbuffer[80];
+long isGreenVisable;
 
 int i, s, m;
 long potential[2];
@@ -76,6 +90,21 @@ int factor_array[2][8] =
 int matrix_prox[2][8] =
 	{{8,4,2,0,0,-4,-8,-16},
 	{-16,-8,-4,0,0,2,4,8}};
+
+void ledFlash(void) {
+	long j;
+	e_set_led(0,1);
+	e_set_led(1,1);
+	e_set_led(7,1);
+
+	for(j=0;j<300000;j++)
+			asm("nop");
+
+	e_set_led(0,0);
+	e_set_led(1,0);
+	e_set_led(7,0);
+
+}
 
 /*! \brief Calcul the speed to set on each wheel for avoiding
  *
@@ -114,41 +143,6 @@ void shock_neuron(void)
 	e_set_speed_right(speed[0]);
 }
 
-/*! \brief Calcul the speed to set on each wheel for following
- *
- * Here we do a level-headed sum to take advantage of each captor
- * depending of there position. For exemple if the captor number 0
- * detect something, he has to set the left speed high and set 
- * the right speed low.
- */
-/*void follow_neuron(void)
-{
-	int basic_speed;
-
-	speed[0] = 0;
-	speed[1] = 0;
-	
-	for (m = 0; m < 2; m++)
-		for (i = 0; i<8; i++)
-			speed[m]  += e_get_calibrated_prox(i)*factor_array[m][i];
-	
-	basic_speed = 1000 - (e_get_calibrated_prox(7) + e_get_calibrated_prox(0))*2;
-	//basic_speed = 1600 - (e_get_prox(7)-ProxSensOffBuf[7] + e_get_prox(0)-ProxSensOffBuf[0]);
-	speed[1] = basic_speed + (speed[1]/PROXSCALING_FOLLOW);
-	speed[0] = basic_speed + (speed[0]/PROXSCALING_FOLLOW);
-	
-	if (speed[0] > 1000)
-		speed[0] = 1000;
-	else if ( speed[0] < -1000 )
-		speed[0] = -1000;
-	if (speed[1] > 1000)
-		speed[1] = 1000;
-	else if ( speed[1] < -1000 )
-		speed[1] = -1000;
-	e_set_speed_left(speed[1]);
-	e_set_speed_right(speed[0]);
-}*/
-
 int lin_speed_calc(int distance, int gain)
 {
 	int consigne = 100;
@@ -163,14 +157,14 @@ int lin_speed_calc(int distance, int gain)
 	if(lin_speed >= 1000)
 	{
 		ui_lin = 999/gain - ecart;
-		if(ui_lin > 60)			// valeur aberrante vue sur matlab, donc on restreint à 40 la valeur de ui
+		if(ui_lin > 60)			// valeur aberrante vue sur matlab, donc on restreint ï¿½ 40 la valeur de ui
 			ui_lin = 60.0;
 		lin_speed = 999;
 	}
 	else if(lin_speed <= -1000)
 	{
 		ui_lin = -999/gain + ecart;
-		if(ui_lin < -10)		// valeur aberrante vue sur matlab, donc on restreint à -10 la valeur de ui
+		if(ui_lin < -10)		// valeur aberrante vue sur matlab, donc on restreint ï¿½ -10 la valeur de ui
 			ui_lin = -10.0;
 		lin_speed = -999;
 	}
@@ -206,10 +200,6 @@ void follow_neuron(void)
 /*! \brief The "main" function of the follower demo */
 void run_breitenberg_follower(void)
 {
-	e_init_port();
-	e_init_motors();
-	e_init_ad_scan(ALL_ADC);
-	
 	e_calibrate_ir();
 
 	e_activate_agenda(k2000_led, 2500);
@@ -219,16 +209,52 @@ void run_breitenberg_follower(void)
 }
 
 /*! \brief The "main" function of the avoider demo */
+
+int ninProximity(Distance d) {
+
+	int frontLeft = e_get_prox(7);
+	int frontLeftLeft = e_get_prox(6);	
+	int frontRight = e_get_prox(0);
+	int frontRightRight = e_get_prox(1);	
+
+	return frontRight > d || frontLeft > d || frontRightRight > d || frontLeftLeft > d;
+}
+
+
 void run_breitenberg_shocker(void)
 {	
-	e_init_port();
-	e_init_motors();
-	e_init_ad_scan(ALL_ADC);
-	
-	e_calibrate_ir();
+	//basic set up for the camera and 
+	initCamera();
 
-	e_activate_agenda(flow_led, 900);
-	e_activate_agenda(shock_neuron, 650);
 	e_start_agendas_processing();
-	while(1);
+	int centreValue;
+
+	e_init_sound();
+	e_init_ad_scan(ALL_ADC);
+	e_init_motors();
+	
+
+	long isVisible;
+	while(1){
+
+		ngetImage();
+		nimage(red, &isVisible);
+		e_led_clear();
+			
+		e_activate_agenda(flow_led, 900);
+		e_activate_agenda(shock_neuron, 650);
+
+		if(isCenter() && isVisible){ //If blue is not in the middle then it will go avoid
+			//e_end_agendas_processing();			
+			//e_destroy_agenda(gturn);
+			//forward();
+			e_destroy_agenda(shock_neuron);
+			e_destroy_agenda(flow_led);
+			ledFlash();
+			e_play_sound(0, 2112);
+			e_set_speed_left (0);
+			e_set_speed_right(0);
+			break;
+		}
+	}
 }
