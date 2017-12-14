@@ -36,7 +36,7 @@ void aggressive(void){
 	initCamera();	
 
 	e_start_agendas_processing();
-//	e_init_sound();  // TODO: Uncomment for the demo
+	e_init_sound();  // TODO: Uncomment for the demo
 	long isVisible;
 
 	while(1) {
@@ -49,7 +49,7 @@ void aggressive(void){
 			stop();
 			nforward(slow);
 			angryFlash();
-//			e_play_sound(0, 2112);  // TODO: Uncomment for the demo
+			e_play_sound(0, 2112);  // TODO: Uncomment for the demo
 		} else {
 			// e_activate_agenda(nturn, 650);
 			spin();			
