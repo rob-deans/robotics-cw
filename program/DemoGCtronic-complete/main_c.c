@@ -60,7 +60,7 @@ char c;
 #include "curious.h"
 #include "push.h"
 #include "test.h"
-#include "wallfollow.h"
+#include "helpers.h"
 
 #define PI 3.14159265358979
 
@@ -75,15 +75,15 @@ int main() {
 	//char response[50];
 
 	//system initialization
-	e_init_port();    // configure port pins      
+	e_init_port();   
 	e_start_agendas_processing();
     e_init_motors();
     e_init_sound();
-    // e_play_sound(11028, 8016);
 
 	e_init_uart1();   // initialize UART to 115200 Kbaud
 	e_init_uart2(BAUD115200);   // initialize UART to 115200 Kbaud
 	e_init_ad_scan(ALL_ADC);
+	calibrateProx();
 	
 	//Reset if Power on (some problem for few robots)
 	if (RCONbits.POR) {
@@ -103,8 +103,9 @@ int main() {
         case 2: fear(); break;
         case 3: aggressive(); break;
         case 4: curious(); break;
-        case 5: push(); break;
-        case 6: listen(); break;
+        case 5: push(); break;    // high level behaviour
+        case 6: listen(); break;  // high level behaviour
+        case 7: test(); break;
     }
 
 	while(1);

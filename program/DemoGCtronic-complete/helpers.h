@@ -13,7 +13,7 @@ typedef enum {
 } Speed;
 
 typedef enum {
-	close = 600, dmedium = 300, far = 100
+	close = 750, dmedium = 300, far = 100
 } Distance;
 
 typedef enum {
@@ -27,7 +27,7 @@ typedef enum {
 typedef enum {
 	left = 5, right = 2, front = 7, back = 4
 } Direction;
-
+void getProx(int*[8]);
 // Camera
 void initCamera();
 void ngetImage();
@@ -41,10 +41,12 @@ void nforward(Speed);
 void backward(Speed);
 void stop();
 void moveDistance(Length, Speed);
+void moveBackDistance(Length, Speed);
+void spin();
 
 // IR sensor
-int inProximity(Distance);
-int inProximity_v2(Distance, Direction);
+int _inProximity(Distance);
+int inProximity(Distance, Direction);
 
 // Sound
 int isSoundInFront(int, int);

@@ -1,7 +1,4 @@
-#ifndef _TEST
-#define _TEST
-
-void test(void);
-int checkLeft();
-	
+#ifndef TEST
+#define TEST
+void test();
 #endif

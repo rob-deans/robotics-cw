@@ -12,14 +12,17 @@
 #include "string.h"
 #include "stdlib.h"
 
-#include "./colour_recognition.h"
+#include "./helpers.h"
 
 char newbuffer[160];
 int newnumbuffer[80];
 int m0, m1, m2;
 
 int micCalibration[3] = {0, 0, 0};
-
+int proxCalibration[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+void getProx(int *prox[8]) {
+    prox = proxCalibration;
+}
 // Camera start
 void initCamera() {
 	e_poxxxx_init_cam();
@@ -32,8 +35,11 @@ void ngetImage() {
     while(!e_poxxxx_is_img_ready()){};
 }
 
-// No idea if this will work
-void nimage(ColourType col, long *isVisible){
+// Returns whether the chosen colour is visible
+void nimage(ColourType col, long *isVisible) {
+
+    
+
 	long i;  // Counter
 	int green_c, red_c, blue_c, vis;
 	*isVisible = 0;
@@ -132,48 +138,53 @@ void stop() {
 
 // Moves a certain distance forward or backward not turning
 void moveDistance(Length length, Speed speed) {
-    
-    // int prevLeftSteps = 0;
-    // int leftSteps = 0;
-
-    // leftSteps = prevLeftSteps = e_get_steps_left();
-    
-    // e_set_speed_left(speed);
-    // e_set_speed_right(speed);
-
-    // while (prevLeftSteps + length > leftSteps) {
-    //     leftSteps = e_get_steps_left();
-    // }
-
-    // stop();
 
     int initSteps = e_get_steps_left();
     nforward(speed);
+    // while(e_get_steps_left() - initSteps < length);
     while(e_get_steps_left() < initSteps + length);
     stop();
 
+}
+
+void moveBackDistance(Length length, Speed speed) {
+
+    int initSteps = e_get_steps_left();
+    backward(speed);
+    while(e_get_steps_left() > initSteps - length);
+    stop();
+
+}
+
+// Spin
+void spin() {
+    e_set_speed_left (500);
+    e_set_speed_right(-500);
 }
 
 // Movement end //
 
 // IR sensor/proximity start
 
-int inProximity(Distance d) {
-
-	int frontLeft = e_get_prox(7);
-	int frontRight = e_get_prox(0);	
-
+int _inProximity(Distance d) {
+    char buffer[20];
+    int prox[8];
+    getProx(&prox);
+	int frontLeft = e_get_prox(7) - prox[7];
+	int frontRight = e_get_prox(0) - prox[0];
+    sprintf(buffer, "Prox: %d, %d, %d \r\n", frontLeft, frontRight, d);
+    e_send_uart1_char(buffer, strlen(buffer));   
 	return frontRight > d || frontLeft > d;
 }
 
-int inProximity_v2(Distance d, Direction dir) {
-
+int inProximity(Distance d, Direction dir) {
     // if we are after the front prox - need to use both sensors (see above)
     if(dir == front) {
-        return inProximity(d);
+        return _inProximity(d);
     }
     
-    return e_get_prox(dir) > d;
+    int prox = e_get_prox(dir) - proxCalibration[dir];
+    return prox > d;
 }
 
 // IR sensor/proxmity end //
@@ -226,6 +237,13 @@ void calibrateMic() {
     micCalibration[0] = m0;
     micCalibration[1] = m1;
     micCalibration[2] = m2;
+}
+
+void calibrateProx() {
+    int i;
+    for (i = 0; i < 8; i++) {
+        proxCalibration[i] = e_get_prox(i);
+    }
 }
 
 // Sound end

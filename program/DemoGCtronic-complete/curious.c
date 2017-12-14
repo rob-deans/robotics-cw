@@ -14,7 +14,7 @@
 #include "string.h"
 #include "stdlib.h"
 
-#include "colour_recognition.h"
+#include "helpers.h"
 #include "curious.h"
 
 
@@ -22,6 +22,11 @@ void curious() {
     initCamera();
     e_start_agendas_processing();
     
+    int initFrontLeft = e_get_prox(7);
+    int initFrontRight = e_get_prox(0);
+    int frontRight = 0;
+    int frontLeft = 0;
+
     int initSteps = e_get_steps_left();
     int fullSpin = 1300;
     int multiple;
@@ -29,14 +34,10 @@ void curious() {
     long isVisible = 0;
     while(1) {           
         spin();
-//        if (e_get_steps_left() > initSteps + fullSpin) {
-//            initSteps = e_get_steps_left();
-//            fullSpins++;  
-//        }
         
         while(1) {
-            // Puck is spinning... 
             ngetImage();
+            // Puck is spinning... 
             nimage(red, &isVisible);
             if (isVisible && isCenter()) {              
                 stop();
@@ -48,7 +49,9 @@ void curious() {
         int stepsDiff = 0;
         nforward(medium);
         while(1) {
-            if (inProximity(close)) {                
+            frontLeft = e_get_prox(7) - initFrontLeft;
+            frontRight = e_get_prox(0) - initFrontRight;
+            if (frontLeft > 750 || frontLeft > 750) {                
                 stop();
                 stepsDiff = e_get_steps_left() - steps;
                 break;
@@ -57,7 +60,7 @@ void curious() {
         
         steps = e_get_steps_left();
         
-        b();
+        backward(medium);
         while(1) {
             if (steps - e_get_steps_left() >= stepsDiff) {
                 e_set_led(0, 1);
@@ -67,14 +70,4 @@ void curious() {
         }
         
     }
-}
-
-void spin() {
-    e_set_speed_left (500);
-    e_set_speed_right(-500);
-}
-
-void b() {
-    e_set_speed_left(-500);
-    e_set_speed_right(-500);
 }

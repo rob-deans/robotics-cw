@@ -15,9 +15,9 @@
 #include <a_d/advance_ad_scan/e_micro.h>
 
 #include "push.h"
-#include "test.h"
-#include "wallfollow.h"
-#include "colour_recognition.h"
+#include "navigation.h"
+#include "orientate.h"
+#include "helpers.h"
 
 int naccy0;
 
@@ -39,35 +39,35 @@ void nacc_calibrate() {
 //Main function of follower
 void push() {
 
-	int accy;
-	extern char buffer[60];
+	int initLeft = e_get_prox(5);
+    int left = 0;
 
-	// Calibrate accelerometers
+	int accy;
+
 	e_set_led(8, 1);
+	// Calibrate accelerometers
 	nacc_calibrate();
-	sprintf(buffer, "Calibration values: %d \r\n", naccy0);
-	e_send_uart1_char(buffer, strlen(buffer));
+
 	e_set_led(8, 0);
 	nforward(fast);
 
 	while (1) {
 		// only start checking the acc when close to an object
-		if(inProximity(close)) {
+		if(inProximity(close, front)) {
 			accy=e_read_acc_y(); // read the y axis acc i.e. the forward/back axis
 
 			accy-=naccy0; // calculate the relative value
 
-			// sometimes if it crashes it actually goes above 250 or so checking
-			// that as well as deacceleration
-			// SOMEONE FIDDLE WITH -300 AND 250 SO IT CAN PUSH THE EMPTY BOX BUT NOT WITH
-			// SAY A PHONE ON IT
-			if(accy < -500 || accy > 250) { 
+			if(accy < -250 || accy > 250) { 
 				stop();
 
 				e_play_sound(11028, 8016);
 
 				while(1) {
-					if(checkLeft()) {
+
+					left = e_get_prox(5) - initLeft;
+
+					if(left > 750) {
 						e_set_led(6, 1);
 						nwait(1000000);
 						e_play_sound(11028, 8016);
@@ -80,9 +80,7 @@ void push() {
 }
 
 void navigate() {
-	// spin
-	e_set_speed_left(500);
-	e_set_speed_right(-500);
+	spin();
 	// until we see the colour red
 	long isVisible;
 	initCamera();
@@ -97,14 +95,16 @@ void navigate() {
 		}
 	}
 	// parrallel park
-	wallfollow();
-	// navigate the wall
-	test();
+	int initLeft = orientate();
+	// // navigate the wall
+	navigateWall(initLeft);
 	// listen to push 
 	_listen(_pushObject);
 }
 
 void listen() {
+	e_start_agendas_processing();
+
 	_listen(navigate);
 }
 
@@ -115,20 +115,22 @@ void _pushObject() {
 
 // pass in a function that we want to run when we get over a certain limit
 void _listen(void (*foo)()) {
+	char buffer[20];
 	int vol0=0, vol1=0, vol2=0;
     int offsetVol0=0, offsetVol1=0, offsetVol2=0;
 
     offsetVol0 = e_get_micro_volume(0);
     offsetVol1 = e_get_micro_volume(1);
     offsetVol2 = e_get_micro_volume(2);
-    int VOLUME_THR = 30;
-	extern char buffer[60];
+    int VOLUME_THR = 75;
 
 	while(1) {
 		vol0 = e_get_micro_volume(0)-offsetVol0;
         vol1 = e_get_micro_volume(1)-offsetVol1;
         vol2 = e_get_micro_volume(2)-offsetVol2;
 
+        sprintf(buffer, "%d %d %d\r\n", vol0, vol1, vol2);
+        e_send_uart1_char(buffer, strlen(buffer));	
         if(vol0 > VOLUME_THR || vol2 > VOLUME_THR || vol2 > VOLUME_THR) {
 			(*foo)(); // the function when it is loud enough
 			break;

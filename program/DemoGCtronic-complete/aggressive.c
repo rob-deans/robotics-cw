@@ -14,7 +14,7 @@
 #include "codec/e_sound.h"
 
 #include "aggressive.h"
-#include "colour_recognition.h"
+#include "helpers.h"
 
 void angryFlash(void) {
 
@@ -22,7 +22,7 @@ void angryFlash(void) {
 	e_set_led(1,1);
 	e_set_led(7,1);
 
-	wait(5000);
+	nwait(50000);
 
 	e_set_led(0,0);
 	e_set_led(1,0);
@@ -36,22 +36,23 @@ void aggressive(void){
 	initCamera();	
 
 	e_start_agendas_processing();
-
 //	e_init_sound();  // TODO: Uncomment for the demo
 	long isVisible;
 
 	while(1) {
 		ngetImage();
-		nimage(blue, &isVisible);
+		nimage(red, &isVisible);
+
 		e_led_clear();
 
 		if(isVisible && isCenter()) {
-			e_destroy_agenda(nturn);
+			stop();
 			nforward(slow);
 			angryFlash();
 //			e_play_sound(0, 2112);  // TODO: Uncomment for the demo
 		} else {
-			e_activate_agenda(nturn, 650);			
+			// e_activate_agenda(nturn, 650);
+			spin();			
 		}
 	}
 }
